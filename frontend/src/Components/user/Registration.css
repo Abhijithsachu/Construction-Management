@@ -1,0 +1,67 @@
+.Registrationheading{
+ color: rgb(178, 113, 53);
+}
+.fullname{
+    color: rgb(241, 233, 233);
+font-weight: bold;
+font-size: 15px;
+
+}
+.Email{
+    color: rgb(253, 253, 253);
+    font-weight: bold;
+    font-size: 15px;
+   
+}
+.phone{
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    font-size: 15px;
+}
+.password{
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    font-size: 15px;
+
+}
+.confirmpassword{
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    font-size: 15px;
+
+}
+button{
+    margin-top: 10px;
+    height: 40px;
+    width: 110px;
+    background-color: rgb(82, 15, 15);
+    color: aliceblue;
+    border: none;
+
+}
+.registrationform{
+    border: 1px solid red ;
+    background-color: transparent;
+    height: 300px;
+    text-align: center;
+    width:300px ;
+    padding: 40px;
+    margin: auto;
+    border-radius: 20px;
+    box-shadow: 0px 0px 20px rgb(200, 230, 79);
+}
+.Registrationpage{
+    height: 84vh;
+    padding-top: 100px;
+    background-image: url(https://media.istockphoto.com/id/1420678520/photo/building-site-at-sunset.jpg?s=612x612&w=0&k=20&c=HoDUK1RxsH78Fj9D34nao_MUTbf-vR3G97zUWMtES4k=);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.qualification{
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    font-size: 15px;
+
+
+}
