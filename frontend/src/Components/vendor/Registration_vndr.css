@@ -1,35 +1,100 @@
 
-button{
-    margin-top: 10px;
-    height: 40px;
-    width: 110px;
-    background-color: rgb(82, 15, 15);
-    color: aliceblue;
-    border: none;
-
-}
-.vndrform{
-     border: 1px solid red ;
-    background-color: transparent;
-    height: 340px;
-    text-align: center;
-    width:500px ;
-    padding: 40px;
-    margin: auto;
-    border-radius: 20px;
-    box-shadow: 0px 0px 20px rgb(200, 230, 79);
-}
-.vndrpage{
-    height: 84vh;
-    padding-top: 100px;
-    background-image: url("C:\Users\Ishfaq AHMAD\Desktop\PROJECT\frontend\public\img1.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
+/* Page background */
+.vndrpage {
+  min-height: 100vh;
+  background: linear-gradient(to right, #004e92, #000428);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
-.vndrform label{
-    color: rgb(131, 5, 57);
-    font-weight: bold;
-    font-size: 15px;
+/* Form Card */
+.vndrform {
+  background: #ffffff;
+  width: 500px;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Heading Style */
+.vndrheading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #003f7f;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Table styling */
+.vndrform table {
+  width: 100%;
+}
+
+.vndrform td {
+  padding: 10px 5px;
+}
+
+/* Label Style */
+.vndrform label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #003366;
+}
+
+/* Input Style */
+.vndrform input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cdd6df;
+  border-radius: 6px;
+  transition: 0.3s ease;
+  outline: none;
+  font-size: 14px;
+}
+
+/* Input Hover + Focus Effects */
+.vndrform input:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 8px rgba(0, 102, 204, 0.3);
+}
+
+/* File Input */
+.vndrform input[type="file"] {
+  padding: 5px;
+}
+
+/* Button */
+.submitBtn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.submitBtn:hover {
+  background: #004a99;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 64, 128, 0.4);
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

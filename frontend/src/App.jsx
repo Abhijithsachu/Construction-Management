@@ -11,6 +11,9 @@ import Viewworker from './Components/admin/Viewworker'
 import Viewuser from './Components/admin/Viewuser'
 import Verifyvendor from './Components/admin/Verifyvendor'
 import Homepage from './Components/admin/homepage'
+import Userhome from './Components/user/Userhome'
+import Vndrhome from './Components/vendor/Vndrhome'
+import Wrkhome from './Components/worker/Wrkhome'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -46,6 +49,9 @@ function App() {
         <Route path='/adminviewuser' element={<Viewuser/>}/>
         <Route path='/adminverifyvendor' element={<Verifyvendor/>}/>
         <Route path='/homepage' element={<Homepage/>}/>
+        <Route path='/userhomepage' element={<Userhome/>}/>
+        <Route path='/Vndrhomepage' element={<Vndrhome/>}/> 
+        <Route path='/Wrkhomepage' element={<Wrkhome/>}/> 
       </Routes>
     </>
   )

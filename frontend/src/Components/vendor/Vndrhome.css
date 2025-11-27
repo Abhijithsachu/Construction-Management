@@ -1,0 +1,62 @@
+/* PAGE BACKGROUND */
+.vendor-home-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+  padding-bottom: 50px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* TITLE */
+.vendor-title {
+  font-weight: 700;
+  color: #003f7f;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* CARDS */
+.vendor-card {
+  border-radius: 15px;
+  padding: 20px;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* CARD HOVER EFFECT */
+.vendor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* CARD TITLES */
+.vendor-card .card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #002f5e;
+}
+
+/* CARD PARAGRAPH */
+.vendor-card p {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+}
+
+/* BUTTONS */
+.vendor-btn {
+  background-color: #0066cc !important;
+  border: none !important;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+/* BUTTON HOVER */
+.vendor-btn:hover {
+  background-color: #004a99 !important;
+  transform: scale(1.05);
+  color: white;
+}

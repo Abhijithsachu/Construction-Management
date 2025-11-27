@@ -1,0 +1,73 @@
+/* PAGE BACKGROUND */
+.user-home-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #d9e8ff, #ffffff);
+  padding-bottom: 50px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* TITLE */
+.user-title {
+  font-weight: 700;
+  color: #002f5e;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* DASHBOARD CARDS */
+.user-card {
+  border-radius: 18px;
+  padding: 20px;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: transform 0.35s, box-shadow 0.35s, background 0.3s;
+}
+
+/* HOVER EFFECT */
+.user-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+  background: #f7faff;
+}
+
+/* CARD TITLE */
+.user-card .card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #003c73;
+}
+
+/* DESCRIPTION TEXT */
+.user-card p {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+}
+
+/* DASHBOARD BUTTONS */
+.user-btn {
+  background-color: #0057b3 !important;
+  border: none !important;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+/* BUTTON HOVER EFFECT */
+.user-btn:hover {
+  background-color: #003e80 !important;
+  transform: scale(1.06);
+  color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .user-card {
+    padding: 15px;
+  }
+  .user-card .card-title {
+    font-size: 1.1rem;
+  }
+}
