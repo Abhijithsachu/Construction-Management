@@ -43,6 +43,7 @@ function App() {
       {/* <Registration/> */}
       <Routes>
         <Route path='/' element={<Login></Login>}/>
+        <Route path='/userregistration' element={<Registration/>}/>
         <Route path='/workerregistration' element={<Registration_wrk/>}/>
         <Route path='/venderregistration' element={<Registration_vndr/>}/>
         <Route path='/adminviewworker' element={<Viewworker/>}/>

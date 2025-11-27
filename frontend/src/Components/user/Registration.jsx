@@ -1,10 +1,29 @@
-  import React from 'react'
+  import React, { useState } from 'react'
   import './Registration.css'
+import api from '../../api'
   function Registration() {
-    return (
+    const [name,setname]=useState()
+    const [email,setemail]=useState()
+    const [phone,setphone]=useState()
+    const [password,setpassword]=useState()
+    const [confirmpassword,setconfirmpassword]=useState()
+    const handlesubmit=async(e)=>{
+      console.log('00000000000');
+      
+      e.preventDefault()
+      const body={name,email,phone,password}
+      console.log(body);
+      
+    const res= await api.post("/user/register",body)
+    console.log(res)
+    
+  
+  }
+
+        return (
       <div className='Registrationpage'>
           {/* <img src="login image.jpg" className="loginimage" alt="login image"/> */}
-          <form className="registrationform">
+          <form className="registrationform" onSubmit={handlesubmit}>
           <h1 className='Registrationheading'>Registration</h1>
           <table>
             <tr>
@@ -13,7 +32,7 @@
 
               </td>
               <td>
-        <input type='text'></input> <br/>
+        <input type='text'onChange={(e)=>{setname(e.target.value)}}></input> <br/>
 
               </td>
             </tr>
@@ -23,7 +42,7 @@
                 <label className="Email">Email  </label>
               </td>
               <td>
-                <input type='email'></input><br/>
+                <input type='email'onChange={(e)=>{setemail(e.target.value)}}></input><br/>
               </td>
             </tr>
 
@@ -32,7 +51,7 @@
                 <label className="phone">Phone </label>
               </td>
               <td>
-                <input type='tel'></input><br/>
+                <input type='tel'onChange={(e)=>{setphone(e.target.value)}}></input><br/>
               </td>
             </tr>
 
@@ -41,7 +60,7 @@
                 <label className="password">Password </label>
               </td>
               <td>
-                <input type='password'></input><br/>
+                <input type='password'onChange={(e)=>{setpassword(e.target.value)}}></input><br/>
               </td>
             </tr>
         
@@ -50,7 +69,7 @@
                 <label className="confirmpassword">Confirm Password</label>
               </td>
               <td>
-                <input type='password'></input><br/>
+                <input type='password'onChange={(e)=>{setconfirmpassword(e.target.value)}}></input><br/>
               </td>
             </tr>
         
@@ -59,7 +78,7 @@
         
       
         </table>
-        <button>Registration</button>
+        <button type='submit'>Registration</button>
       
         
 

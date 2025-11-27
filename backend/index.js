@@ -1,0 +1,15 @@
+import mongoose from "mongoose"
+import express from "express"
+import cors from "cors"
+import userRoute from "./Routes/userRoute.js"
+mongoose.connect("mongodb://localhost:27017/Construction").then(()=>{
+    console.log("mongosedb connected successfully")
+})
+.catch((e)=>{
+    consol.log(e);
+})
+const app=express()
+app.use(express.json())
+app.use(cors({origin:"*"}))
+app.listen(8000,()=>{console.log("ServerStarted on port 8000")})
+app.use("/api/user",userRoute)
