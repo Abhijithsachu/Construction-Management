@@ -1,24 +1,32 @@
-import React from 'react'
-import './Login.css'
+import React from "react";
+import "./Login.css";
+import { FaUser, FaLock } from "react-icons/fa";
+
 function Login() {
   return (
-    <div className='loginpage'>
-        {/* <img src="login image.jpg" className="loginimage" alt="login image"/> */}
-        <form className="loginform">
-        <h1 className='loginheading'>Construction Management</h1>
-      <label className="username">User name </label>
-      <input type='text'></input> <br/>
-      <label className="pass">Password  </label>
-      <input type='password'></input><br/>
-      <button>Login</button>
-    
-       
+    <div className="loginpage">
 
+      <form className="loginform">
+        <h1 className="loginheading">Construction Management</h1>
 
-    </form>
+        <div className="inputbox">
+          <FaUser className="icon" />
+          <input type="text" placeholder="Username" />
+        </div>
+
+        <div className="inputbox">
+          <FaLock className="icon" />
+          <input type="password" placeholder="Password" />
+        </div>
+
+        <button className="loginbtn" type="submit">
+          Login
+        </button>
+      </form>
+
     </div>
-    
-  )
+  );
 }
 
-export default Login
+export default Login;
+

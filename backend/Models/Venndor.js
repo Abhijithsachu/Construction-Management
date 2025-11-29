@@ -13,18 +13,14 @@ const vendorSchema=new Schema({
         type:Number,
         required:true,
     },
-    ID:{
-        type:String,
-        required:true
-    },
     Location:{
         type:String,
         required:true,
     },
-    Logo:{
+    CompanyLogo:{
         type:String,
-        required:true,
+        // required:true,
     }
 })
-const VendorData=mongoose.model("Vendor",VendorSchema)
-export default VendorData
+const VENDOR=mongoose.model("Vendor",vendorSchema)
+export default VENDOR

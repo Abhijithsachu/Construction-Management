@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const UserSchema=new Schema({
-    Name:{
+    name:{
         type:String,
         required:true,
     },
@@ -9,9 +9,11 @@ const UserSchema=new Schema({
         type:String,
         required:true,
     },
-    ID:{
-        type:String,
-        required:true
+
+    commonkey:{
+       type:Schema.Types.ObjectId,
+
+    ref:"login"
     },
     phoneNo:{
         type:String,

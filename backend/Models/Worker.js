@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const workerSchema=new Schema({
-    Name:{
+    name:{
         type:String,
         required:true,
     },
@@ -13,19 +13,23 @@ const workerSchema=new Schema({
         type:String,
         required:true,
     },
-    ID:{
-        type:String,
-        required:true
-    },
+ 
     jobrole:{
         type:String,
         required:true,
     },
+    photo:{
+        type:String
+    },
     qualification:{
         type:String,
         required:true,
-    }
+    },   commonkey:{
+       type:Schema.Types.ObjectId,
+
+    ref:"login"
+    },
     
 })
-const wrokerData=mongoose.model("Worker",workerSchema)
-export default workerData
+const WORKER=mongoose.model("Worker",workerSchema)
+export default WORKER

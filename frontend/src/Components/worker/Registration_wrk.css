@@ -1,34 +1,87 @@
 
-.loginheading{
- color: rgb(178, 113, 53);
+/* Full-page background */
+.regpage {
+  width: 100%;
+  height: 100vh;
+  background-image: url("https://i.ibb.co/Hn6SqZ0/construction-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.username{
-font-weight: bold;
-}
-.pass{
-    font-weight: bold;
 
+/* Glass Card Form */
+.Acc1form {
+  width: 480px;
+  padding: 35px 40px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  text-align: center;
 }
-button{
-    background-color: black;
-    color: aliceblue;
+
+/* Heading */
+.Acc1heading {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 25px;
 }
-.loginform{
-    border: 1px solid red ;
-    background-color: transparent;
-    height: 300px;
-    text-align: center;
-    width:300px ;
-    padding: 40px;
-    margin: auto;
-    border-radius: 20px;
-    box-shadow: 0px 0px 20px rgb(200, 230, 79);
+
+/* Table layout */
+table {
+  width: 100%;
 }
-.loginpage{
-    height: 84vh;
-    padding-top: 100px;
-    background-image: url(../assets/login\ image.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
+
+td {
+  padding: 10px 5px;
+}
+
+/* Label styling */
+label {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Input fields */
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* Register Button */
+.regbtn {
+  margin-top: 25px;
+  width: 100%;
+  padding: 12px;
+  font-size: 17px;
+  border-radius: 8px;
+  border: none;
+  background: #ffcc00;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* Hover Effect */
+.regbtn:hover {
+  background: #ffdd4d;
+  transform: scale(1.04);
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  .Acc1form {
+    width: 90%;
+    padding: 25px;
+  }
 }
