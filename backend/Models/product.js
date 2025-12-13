@@ -21,6 +21,10 @@ const productSchema=new Schema({
         type:Schema.Types.ObjectId,
         ref:"Vendor",
     },
+    Description:{
+        type:String,
+        required:true,
+    }
 
 
 

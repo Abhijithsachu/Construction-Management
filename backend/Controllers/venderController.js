@@ -14,7 +14,6 @@ export const venderregistration=async(req,res)=>{
         const login=new loginData({
             userName:email,
             passWord:hashpassword,
-
             role:"Vendor"
         })
         await login.save()
@@ -30,4 +29,25 @@ export const venderregistration=async(req,res)=>{
         console.log(error)
         return res.status(500).json({message:"server side error"})
     }
+}
+
+export const staffdetails=async(req,res)=>{
+    const {id}=req.params
+    console.log(id);
+    try{
+        const shop=await VENDOR.findOne({commonkey:id})
+        if(!shop){
+            return res.status(400).json({message:"Cannot find User"})
+        }
+        // console.log(shop);
+         return res.status(200).json({shop})
+
+        
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({message:"server side error"})
+    }
+
+    
 }

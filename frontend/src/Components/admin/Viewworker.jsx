@@ -1,62 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import Navpage from './Navpage';
+import api from '../../api';
 
 function Viewworker() {
+  const [workers, setWorkers] = useState([]);
+
+  const fetchDetails = async () => {
+    try {
+      const res = await api.get("/worker/all");
+      setWorkers(res.data.workerDetails);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDetails();
+  }, []);
+
   return (
     <div>
-      <Navpage></Navpage>
-      <div className='d-flex justify-content-between'>
-        <div><Link to={'/homepage'}>
-       <Button className="float-end mb-2">Back</Button></Link>
-       </div>
-       <h3 align='center'className='d-inline'>WORKER INFO</h3> 
-       <Link to={'/workerregistration'}>
-       <Button className="float-end mb-2">+ ADD</Button></Link>
-</div>
-          <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-          <th>Accept</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-          <td><Button className='btn-success'>Accept</Button></td>
-          <td><Button className='btn-danger'>Delete</Button></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-          <td><Button className='btn-success'>Accept</Button></td>
-          <td><Button className='btn-danger'>Delete</Button></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Larry</td>
-          <td>@twitter</td>
-          <td>Bird</td>
-          <td><Button className='btn-success'>Accept</Button></td>
-          <td><Button className='btn-danger'>Delete</Button></td>
-        </tr>
-      </tbody>
-    </Table>
+      <Navpage />
 
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <Link to="/homepage">
+          <Button>Back</Button>
+        </Link>
+
+        <h3>WORKER INFO</h3>
+
+        <Link to="/workerregistration">
+          <Button>+ ADD</Button>
+        </Link>
+      </div>
+
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Job Role</th>
+            <th>Email</th>
+            <th>PhoneNo</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {workers.map((worker, index) => (
+            <tr key={worker._id}>
+              <td>{index + 1}</td>
+              <td>{worker.name}</td>
+              <td>{worker.jobrole}</td>
+              <td>{worker.email}</td>
+              <td>{worker.phoneNo}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
-  )
+  );
 }
+
 
 export default Viewworker

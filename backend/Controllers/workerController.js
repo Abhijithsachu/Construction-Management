@@ -46,3 +46,15 @@ export const workerregistration = async (req, res) => {
     return res.status(500).json({ message: "Server side Error" });
   }
 };
+export const getallWorkers= async(req, res)=>{
+  try{
+    const workerDetails=await WORKER.find()
+    console.log(workerDetails);
+    
+    return res.status(200).json({workerDetails});
+  }
+  catch (error){
+    console.log(error)
+    return res.status(500).json({ message:"Server Side Error"});
+  }
+}

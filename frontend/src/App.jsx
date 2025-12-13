@@ -14,6 +14,7 @@ import Homepage from './Components/admin/homepage'
 import Userhome from './Components/user/Userhome'
 import Vndrhome from './Components/vendor/Vndrhome'
 import Wrkhome from './Components/worker/Wrkhome'
+import Addprd from './Components/vendor/Addprd'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -53,6 +54,7 @@ function App() {
         <Route path='/userhomepage' element={<Userhome/>}/>
         <Route path='/Vndrhomepage' element={<Vndrhome/>}/> 
         <Route path='/Wrkhomepage' element={<Wrkhome/>}/> 
+        <Route path='/addprdpage' element={<Addprd/>}/>
       </Routes>
     </>
   )

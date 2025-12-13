@@ -1,67 +1,84 @@
-.Registrationheading{
- color: rgb(178, 113, 53);
+/* Page Background */
+.Registrationpage {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #4e73df, #1cc88a);
+  font-family: 'Poppins', sans-serif;
 }
-.fullname{
-    color: rgb(241, 233, 233);
-font-weight: bold;
-font-size: 15px;
 
+/* Form Container */
+.registrationform {
+  background: #fff;
+  width: 420px;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  animation: fadeIn 0.8s ease;
 }
-.Email{
-    color: rgb(253, 253, 253);
-    font-weight: bold;
-    font-size: 15px;
-   
-}
-.phone{
-    color: rgb(255, 255, 255);
-    font-weight: bold;
-    font-size: 15px;
-}
-.password{
-    color: rgb(255, 255, 255);
-    font-weight: bold;
-    font-size: 15px;
 
+/* Heading */
+.Registrationheading {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
 }
-.confirmpassword{
-    color: rgb(255, 255, 255);
-    font-weight: bold;
-    font-size: 15px;
 
+/* Table Layout */
+.registrationform table {
+  width: 100%;
 }
-button{
-    margin-top: 10px;
-    height: 40px;
-    width: 110px;
-    background-color: rgb(82, 15, 15);
-    color: aliceblue;
-    border: none;
 
+.registrationform td {
+  padding: 10px 0;
 }
-.registrationform{
-    border: 1px solid red ;
-    background-color: transparent;
-    height: 300px;
-    text-align: center;
-    width:300px ;
-    padding: 40px;
-    margin: auto;
-    border-radius: 20px;
-    box-shadow: 0px 0px 20px rgb(200, 230, 79);
-}
-.Registrationpage{
-    height: 84vh;
-    padding-top: 100px;
-    background-image: url(https://media.istockphoto.com/id/1420678520/photo/building-site-at-sunset.jpg?s=612x612&w=0&k=20&c=HoDUK1RxsH78Fj9D34nao_MUTbf-vR3G97zUWMtES4k=);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-}
-.qualification{
-    color: rgb(255, 255, 255);
-    font-weight: bold;
-    font-size: 15px;
 
+.registrationform label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #555;
+}
 
+/* Inputs */
+.registrationform input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.registrationform input:focus {
+  border-color: #4e73df;
+  box-shadow: 0 0 6px rgba(78, 115, 223, 0.4);
+}
+
+/* Submit Button */
+.registrationform button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #4e73df;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.registrationform button:hover {
+  background: #2e59d9;
+}
+
+/* Small fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

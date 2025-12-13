@@ -20,6 +20,11 @@ const vendorSchema=new Schema({
     CompanyLogo:{
         type:String,
         // required:true,
+    },
+    commonkey:{
+        type:Schema.Types.ObjectId,
+        ref:"Login",
+        required:true
     }
 })
 const VENDOR=mongoose.model("Vendor",vendorSchema)
