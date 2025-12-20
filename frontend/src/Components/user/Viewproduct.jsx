@@ -25,7 +25,7 @@ function UserViewProduct() {
   const filteredProducts = products.filter((item) => {
     const term = searchTerm.toLowerCase();
     return (
-      item.productname?.toLowerCase().includes(term) || // search by shop name
+      item.productname ?.toLowerCase().includes(term) || // search by shop name
       item.price?.toString().includes(term)          // search by price
     );
   });
