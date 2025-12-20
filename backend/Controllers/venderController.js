@@ -31,7 +31,7 @@ export const venderregistration=async(req,res)=>{
     }
 }
 
-export const staffdetails=async(req,res)=>{
+export const shopHome=async(req,res)=>{
     const {id}=req.params
     console.log(id);
     try{

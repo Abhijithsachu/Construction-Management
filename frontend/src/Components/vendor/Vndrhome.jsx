@@ -1,8 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, Row, Col, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import './Vndrhome.css'
+import api from '../../api';
 function Vndrhome() {
+  const LoginId = localStorage.getItem("LoginId");
+
+  // Fetch shop id
+  const getShop = async () => {
+    try {
+      const res = await api.get(`/vendor/details/${LoginId}`);
+      localStorage.setItem('vendorId',res.data.shop._id)
+      console.log(res);
+      
+    } catch (error) {
+      console.error("Failed to fetch shop:", error);
+    }
+  };
+useEffect(()=>{
+  getShop()
+})
   return (
     
     <div className="vendor-home-page">
@@ -17,7 +34,7 @@ function Vndrhome() {
               <Card.Body className="text-center">
                 <Card.Title>Add Products</Card.Title>
                 <p>Add new construction materials or tools to your catalog.</p>
-                <Link to="/vendor/addproduct" className="btn vendor-btn">
+                <Link to="/addprdpage" className="btn vendor-btn">
                   Add Product
                 </Link>
               </Card.Body>
@@ -28,10 +45,10 @@ function Vndrhome() {
           <Col md={4}>
             <Card className="vendor-card">
               <Card.Body className="text-center">
-                <Card.Title>Add Product Image</Card.Title>
-                <p>Upload or change product images.</p>
-                <Link to="/vendor/addproductimage" className="btn vendor-btn">
-                  Upload Image
+                <Card.Title>View Product</Card.Title>
+                <p>Product details</p>
+                <Link to="/viewprdt" className="btn vendor-btn">
+                  View
                 </Link>
               </Card.Body>
             </Card>

@@ -15,6 +15,8 @@ import Userhome from './Components/user/Userhome'
 import Vndrhome from './Components/vendor/Vndrhome'
 import Wrkhome from './Components/worker/Wrkhome'
 import Addprd from './Components/vendor/Addprd'
+import Viewproduct from './Components/vendor/Viewproduct'
+import Editproduct from './Components/vendor/Editproduct'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -55,6 +57,8 @@ function App() {
         <Route path='/Vndrhomepage' element={<Vndrhome/>}/> 
         <Route path='/Wrkhomepage' element={<Wrkhome/>}/> 
         <Route path='/addprdpage' element={<Addprd/>}/>
+        <Route path='/viewprdt' element={<Viewproduct/>}/>
+        <Route path='/editproduct/:id' element={<Editproduct/>}/>
       </Routes>
     </>
   )

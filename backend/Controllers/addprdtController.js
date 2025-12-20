@@ -31,3 +31,25 @@ export const addprdts = async (req,res) => {
        return res.status(500).json({message:"server side error"}) 
     }
 }
+
+
+// Get products by vendor
+export const getProductByShop= async(req,res)=>{
+    try{
+    let shopId= req.params.VenderId
+    const product= await productData.find({Vendorid:shopId})
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export const getproductById=async(req,res)=> {
+try{
+let productId=req.params.productId
+let products=await productData.find({productId:productId})
+}
+}
+
+
+
