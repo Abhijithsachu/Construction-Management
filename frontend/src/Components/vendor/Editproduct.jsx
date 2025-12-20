@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import api from "../../api";
 
 function Editproduct() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ function Editproduct() {
   }, []);
 
   const fetchProduct = async () => {
-    const res = await axios.get(`http://localhost:8000/api/product/${id}`);
+    const res = await api.get(`/product/${id}`);
     setName(res.data.productname);
     setPrice(res.data.price);
     setQuantity(res.data.Quantity);
@@ -36,13 +37,13 @@ function Editproduct() {
     formData.append("description", description);
     if (photo) formData.append("photo", photo);
 
-    await axios.put(
-      `http://localhost:8000/api/product/update/${id}`,
+    await api.put(
+      `/product/update/${id}`,
       formData
     );
 
     alert("Product Updated Successfully");
-    navigate("/viewproduct");
+    navigate("/viewprdt");
   };
 
   return (
@@ -96,6 +97,7 @@ function Editproduct() {
         <button className="btn btn-primary mt-3">
           Update Product
         </button>
+        
       </form>
     </div>
   );

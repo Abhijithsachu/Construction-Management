@@ -1,101 +1,25 @@
-/* Background */
-.loginpage {
-  min-height: 100vh;
-  background: linear-gradient(
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.6)
-    ),
-    url("https://images.unsplash.com/photo-1503387762-592deb58ef4e");
+.login-background {
+  background-image: url('https://images.unsplash.com/photo-1560185127-6e3b05d45d7a?auto=format&fit=crop&w=1950&q=80');
   background-size: cover;
   background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Segoe UI", sans-serif;
 }
 
-/* Login Card */
-.loginform {
-  width: 380px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 35px;
-  border-radius: 12px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-  animation: fadeIn 0.7s ease-in-out;
-}
-
-/* Title */
-.loginheading {
-  text-align: center;
-  font-weight: 700;
-  margin-bottom: 5px;
-  color: #333;
-}
-
-.subtext {
-  text-align: center;
-  font-size: 14px;
-  color: #777;
-  margin-bottom: 25px;
-}
-
-/* Input Fields */
-.inputbox {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.inputbox input {
+.login-card {
+  background: rgba(255, 255, 255, 0.9);
+  min-width: 300px;
+  max-width: 400px;
   width: 100%;
-  padding: 12px 12px 12px 42px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  outline: none;
-  font-size: 15px;
-  transition: 0.3s;
 }
 
-.inputbox input:focus {
-  border-color: #ff9800;
-  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+.login-card h3 {
+  font-weight: bold;
 }
 
-.icon {
-  position: absolute;
-  top: 50%;
-  left: 12px;
-  transform: translateY(-50%);
-  color: #888;
-  font-size: 16px;
+.login-card .form-control {
+  border-radius: 0.5rem;
 }
 
-/* Button */
-.loginbtn {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #ff9800, #ff5722);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.loginbtn:hover {
-  background: linear-gradient(135deg, #ff5722, #e64a19);
-  transform: translateY(-2px);
-}
-
-/* Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.login-card .btn-primary {
+  border-radius: 0.5rem;
+  font-weight: bold;
 }

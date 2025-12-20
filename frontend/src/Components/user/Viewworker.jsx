@@ -1,35 +1,22 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
-import Button from 'react-bootstrap/Button';
-import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
-function Viewproduct() {
-  const [products, setProducts] = useState([]);
-  const vendorId = localStorage.getItem("vendorId");
+function Viewworkers() {
+  const [workers, setWorkers] = useState([]);
 
   useEffect(() => {
-    fetchProducts();
+    fetchAcceptedWorkers();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchAcceptedWorkers = async () => {
     try {
-      const res = await api.get(`/product/vendor/${vendorId}`);
-      setProducts(res.data);
+      const res = await api.get("/worker/accepted"); // accepted workers API
+      setWorkers(res.data);
     } catch (error) {
       console.error(error);
     }
   };
-
-  const handleDelete=async(id)=>{
-    try{
-        console.log(id);
-        const res=await api.delete(`/product/vendor/delete/${id}`)
-        console.log(res);
-        alert(res.data.message||"Deleted Sucessfully")
-        fetchProducts()
-        
-    }catch(e){console.log(e)}
-  }
 
   return (
     <div
@@ -44,50 +31,59 @@ function Viewproduct() {
     >
       <div className="container">
         <h2 className="text-center fw-bold text-white mb-4">
-          🏗️ My Products
+          ✅ Accepted Workers
         </h2>
 
         <div className="row g-4">
-          {products.length === 0 ? (
+          {workers.length === 0 ? (
             <p className="text-center text-light">
-              No products found
+              No accepted workers found
             </p>
           ) : (
-            products.map((item) => (
+            workers.map((item) => (
               <div className="col-lg-4 col-md-6" key={item._id}>
                 <div className="card h-100 shadow-lg border-0">
+
+                  {/* Worker Image */}
                   <img
-                    src={`http://localhost:8000/${item.Photo}`}
+                    src={`http://localhost:8000/${item.photo}`}
                     className="card-img-top"
-                    alt={item.productname}
+                    alt={item.name}
                     style={{ height: "220px", objectFit: "cover" }}
                   />
 
                   <div className="card-body d-flex flex-column">
                     <h5 className="card-title fw-semibold">
-                      {item.productname}
+                      {item.name}
                     </h5>
 
                     <p className="card-text text-muted small">
-                      {item.Description}
+                      {item.jobRole}
                     </p>
 
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <span className="badge bg-success fs-6">
-                        ₹ {item.price}
+                        Accepted
                       </span>
                       <span className="badge bg-secondary">
-                        Qty: {item.Quantity}
+                        📍 {item.location}
                       </span>
                     </div>
 
-                    <Link
-                      to={`/editproduct/${item._id}`}
-                      className="btn btn-outline-primary mt-auto w-100"
+                    <p className="small mb-1">
+                      📞 {item.phone}
+                    </p>
+
+                    <p className="small text-muted mb-0">
+                      ✉️ {item.email}
+                    </p>
+
+                    <Button
+                      variant="outline-dark"
+                      className="mt-auto w-100"
                     >
-                      ✏️ Edit Product
-                    </Link>
-                    <Button variant="outline-danger mt-3 w-100" onClick={()=>handleDelete(item._id)} >Delete</Button>
+                      View Profile
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -99,4 +95,4 @@ function Viewproduct() {
   );
 }
 
-export default Viewproduct;
+export default Viewworkers;

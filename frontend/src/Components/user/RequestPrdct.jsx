@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
-import Button from 'react-bootstrap/Button';
-import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
-function Viewproduct() {
+function RequestPrdct() {
   const [products, setProducts] = useState([]);
-  const vendorId = localStorage.getItem("vendorId");
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     fetchProducts();
@@ -13,23 +12,25 @@ function Viewproduct() {
 
   const fetchProducts = async () => {
     try {
-      const res = await api.get(`/product/vendor/${vendorId}`);
+      const res = await api.get("/product"); // all products
       setProducts(res.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleDelete=async(id)=>{
-    try{
-        console.log(id);
-        const res=await api.delete(`/product/vendor/delete/${id}`)
-        console.log(res);
-        alert(res.data.message||"Deleted Sucessfully")
-        fetchProducts()
-        
-    }catch(e){console.log(e)}
-  }
+  const handleRequest = async (productId) => {
+    try {
+      const res = await api.post("/product/request", {
+        productId,
+        userId,
+      });
+      alert(res.data.message || "Product requested successfully");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to request product");
+    }
+  };
 
   return (
     <div
@@ -44,18 +45,19 @@ function Viewproduct() {
     >
       <div className="container">
         <h2 className="text-center fw-bold text-white mb-4">
-          🏗️ My Products
+          📦 Request Products
         </h2>
 
         <div className="row g-4">
           {products.length === 0 ? (
             <p className="text-center text-light">
-              No products found
+              No products available
             </p>
           ) : (
             products.map((item) => (
               <div className="col-lg-4 col-md-6" key={item._id}>
                 <div className="card h-100 shadow-lg border-0">
+
                   <img
                     src={`http://localhost:8000/${item.Photo}`}
                     className="card-img-top"
@@ -77,18 +79,19 @@ function Viewproduct() {
                         ₹ {item.price}
                       </span>
                       <span className="badge bg-secondary">
-                        Qty: {item.Quantity}
+                        Available: {item.Quantity}
                       </span>
                     </div>
 
-                    <Link
-                      to={`/editproduct/${item._id}`}
-                      className="btn btn-outline-primary mt-auto w-100"
+                    <Button
+                      variant="warning"
+                      className="mt-auto fw-bold w-100"
+                      onClick={() => handleRequest(item._id)}
                     >
-                      ✏️ Edit Product
-                    </Link>
-                    <Button variant="outline-danger mt-3 w-100" onClick={()=>handleDelete(item._id)} >Delete</Button>
+                      📥 Request Product
+                    </Button>
                   </div>
+
                 </div>
               </div>
             ))
@@ -99,4 +102,4 @@ function Viewproduct() {
   );
 }
 
-export default Viewproduct;
+export default RequestPrdct;

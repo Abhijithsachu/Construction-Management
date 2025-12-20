@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
-import Button from 'react-bootstrap/Button';
-import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-function Viewproduct() {
+function UserViewProduct() {
   const [products, setProducts] = useState([]);
-  const vendorId = localStorage.getItem("vendorId");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchProducts();
@@ -13,23 +13,22 @@ function Viewproduct() {
 
   const fetchProducts = async () => {
     try {
-      const res = await api.get(`/product/vendor/${vendorId}`);
-      setProducts(res.data);
+      const res = await api.get("/product/allproduct"); // USER API
+      console.log(res);
+      setProducts(res.data.products);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleDelete=async(id)=>{
-    try{
-        console.log(id);
-        const res=await api.delete(`/product/vendor/delete/${id}`)
-        console.log(res);
-        alert(res.data.message||"Deleted Sucessfully")
-        fetchProducts()
-        
-    }catch(e){console.log(e)}
-  }
+  // Filter products based on search term
+  const filteredProducts = products.filter((item) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      item.productname?.toLowerCase().includes(term) || // search by shop name
+      item.price?.toString().includes(term)          // search by price
+    );
+  });
 
   return (
     <div
@@ -44,18 +43,27 @@ function Viewproduct() {
     >
       <div className="container">
         <h2 className="text-center fw-bold text-white mb-4">
-          🏗️ My Products
+          🧱 Construction Materials
         </h2>
 
+        {/* SEARCH BAR */}
+        <Form className="mb-4">
+          <Form.Control
+            type="text"
+            placeholder="Search by Shop Name or Price..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </Form>
+
         <div className="row g-4">
-          {products.length === 0 ? (
-            <p className="text-center text-light">
-              No products found
-            </p>
+          {filteredProducts.length === 0 ? (
+            <p className="text-center text-light">No products available</p>
           ) : (
-            products.map((item) => (
+            filteredProducts.map((item) => (
               <div className="col-lg-4 col-md-6" key={item._id}>
                 <div className="card h-100 shadow-lg border-0">
+                  {/* Product Image */}
                   <img
                     src={`http://localhost:8000/${item.Photo}`}
                     className="card-img-top"
@@ -63,6 +71,7 @@ function Viewproduct() {
                     style={{ height: "220px", objectFit: "cover" }}
                   />
 
+                  {/* Card Body */}
                   <div className="card-body d-flex flex-column">
                     <h5 className="card-title fw-semibold">
                       {item.productname}
@@ -73,21 +82,22 @@ function Viewproduct() {
                     </p>
 
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                      <span className="badge bg-success fs-6">
+                      <span className="badge bg-warning text-dark fs-6">
                         ₹ {item.price}
                       </span>
                       <span className="badge bg-secondary">
-                        Qty: {item.Quantity}
+                        Available: {item.Quantity}
                       </span>
                     </div>
 
-                    <Link
-                      to={`/editproduct/${item._id}`}
-                      className="btn btn-outline-primary mt-auto w-100"
-                    >
-                      ✏️ Edit Product
-                    </Link>
-                    <Button variant="outline-danger mt-3 w-100" onClick={()=>handleDelete(item._id)} >Delete</Button>
+                    {/* Buttons */}
+                    <Button variant="outline-dark" className="mb-2 w-100">
+                      View Details
+                    </Button>
+
+                    <Button variant="warning" className="fw-bold w-100">
+                      Request Quote
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -99,4 +109,4 @@ function Viewproduct() {
   );
 }
 
-export default Viewproduct;
+export default UserViewProduct;
