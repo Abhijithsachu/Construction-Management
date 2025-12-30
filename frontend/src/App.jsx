@@ -29,6 +29,7 @@ import VendorUpdateStatus from './Components/vendor/VendorUpdateStatus'
 import VendorViewFeedback from './Components/vendor/VendorViewFeedback'
 import VendorViewRequests from './Components/vendor/ViewreqPrdct'
 import UserViewProduct from './Components/user/UserViewproduct'
+import ViewProject from './Components/worker/viewproject'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -82,6 +83,7 @@ function App() {
         <Route path='/viewrequests' element={<VendorViewRequests/>}/>
         <Route path='/VendorUpdateStatus' element={<VendorUpdateStatus/>}/>
         <Route path='/VendorViewFeedback' element={<VendorViewFeedback/>}/>
+        <Route path='/projects' element={<ViewProject/>}/>
     </Routes>
     </>
   )

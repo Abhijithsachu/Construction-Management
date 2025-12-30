@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../../api"; // Make sure your API base URL is correct
+import api from "../../api";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
@@ -7,54 +7,75 @@ import Badge from "react-bootstrap/Badge";
 import { useNavigate } from "react-router-dom";
 
 function Projectdetails() {
-  const [projects, setProjects] = useState([]);
+  const navigate = useNavigate();
 
-  // Form state
+  /* ---------------- STATES ---------------- */
+  const [projects, setProjects] = useState([]);
+  const [workers, setWorkers] = useState([]);
+
+  // form
   const [projectName, setProjectName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [selectedWorker, setSelectedWorker] = useState("");
+  const userId = localStorage.getItem("userId");
 
-  const navigate = useNavigate();
-
-  // Fetch all projects
+  /* ---------------- FETCH PROJECTS ---------------- */
   const fetchProjects = async () => {
     try {
-      const res = await api.get("/project"); // backend GET endpoint
-      console.log("Fetched projects:", res.data);
-      setProjects(res.data);
+      const res = await api.get(`/projects/userproject/${userId}`);
+      setProjects(res.data.data);
+      console.log(res,"jjjj");
+      
     } catch (err) {
-      console.error("Error fetching projects:", err.response?.data || err.message);
+      console.error(err);
+    }
+  };
+
+  /* ---------------- FETCH VERIFIED WORKERS ---------------- */
+  const fetchAcceptedWorkers = async () => {
+    try {
+      const res = await api.get("/worker/verifiedworker");
+      setWorkers(res.data);
+      console.log("Verified workers:", res.data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   useEffect(() => {
     fetchProjects();
+    fetchAcceptedWorkers();
   }, []);
 
-  // Add new project
+  /* ---------------- ADD PROJECT ---------------- */
   const handleAddProject = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/project/add", {
+     let re= await api.post("/project/add", {
         projectName,
         location,
         description,
         startDate,
-        endDate,
+        workers: selectedWorker,
+        userId
       });
-      alert(res.data.message || "Project added successfully");
+      console.log(re);
+      
+      alert("Project added successfully");
       fetchProjects();
 
-      // Reset form
+      // reset
       setProjectName("");
       setLocation("");
       setDescription("");
       setStartDate("");
       setEndDate("");
+      setSelectedWorker("");
     } catch (err) {
-      console.error("Error adding project:", err.response?.data || err.message);
+      console.error(err);
       alert("Failed to add project");
     }
   };
@@ -68,20 +89,13 @@ function Projectdetails() {
         backgroundPosition: "center",
         minHeight: "100vh",
         paddingTop: "40px",
-        position: "relative", // Needed for absolute back button
       }}
     >
       {/* BACK BUTTON */}
       <Button
         variant="light"
         onClick={() => navigate(-1)}
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-          zIndex: 10,
-          fontWeight: "bold",
-        }}
+        style={{ position: "absolute", top: 20, left: 20 }}
       >
         ⬅ Back
       </Button>
@@ -91,10 +105,11 @@ function Projectdetails() {
           🏗️ Project Management
         </h2>
 
-        {/* ADD PROJECT FORM */}
+        {/* -------- ADD PROJECT FORM -------- */}
         <div className="card shadow-lg border-0 mb-4">
           <div className="card-body">
             <h5 className="fw-bold mb-3">➕ Add New Project</h5>
+
             <Form onSubmit={handleAddProject}>
               <div className="row">
                 <div className="col-md-6 mb-3">
@@ -105,6 +120,7 @@ function Projectdetails() {
                     required
                   />
                 </div>
+
                 <div className="col-md-6 mb-3">
                   <Form.Control
                     placeholder="Location"
@@ -113,16 +129,18 @@ function Projectdetails() {
                     required
                   />
                 </div>
+
                 <div className="col-md-12 mb-3">
                   <Form.Control
                     as="textarea"
                     rows={2}
-                    placeholder="Project Description"
+                    placeholder="Description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     required
                   />
                 </div>
+
                 <div className="col-md-6 mb-3">
                   <Form.Control
                     type="date"
@@ -131,6 +149,7 @@ function Projectdetails() {
                     required
                   />
                 </div>
+
                 <div className="col-md-6 mb-3">
                   <Form.Control
                     type="date"
@@ -139,15 +158,31 @@ function Projectdetails() {
                     required
                   />
                 </div>
+
+                {/* -------- WORKER DROPDOWN -------- */}
+                <div className="col-md-12 mb-3">
+                  <Form.Select
+                    value={selectedWorker}
+                    onChange={(e) => setSelectedWorker(e.target.value)}
+                  >
+                    <option value="">Select Verified Worker</option>
+                    {workers.map((worker) => (
+                      <option key={worker._id} value={worker._id}>
+                        {worker.name} – {worker.jobrole}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </div>
               </div>
-              <Button type="submit" variant="success" className="fw-bold">
+
+              <Button type="submit" variant="success">
                 ➕ Add Project
               </Button>
             </Form>
           </div>
         </div>
 
-        {/* VIEW PROJECTS */}
+        {/* -------- PROJECT LIST -------- */}
         <div className="row g-4">
           {projects.length === 0 ? (
             <p className="text-center text-light">No projects found</p>
@@ -161,56 +196,31 @@ function Projectdetails() {
                     <Badge bg="info" className="me-2">
                       {project.location}
                     </Badge>
-                    <Badge bg="secondary">
-                      {project.status || "In Progress"}
-                    </Badge>
 
-                    <p className="text-muted mt-2">{project.description}</p>
+                    <p className="text-muted mt-2">
+                      {project.description}
+                    </p>
 
                     <small>
                       Start: {project.startDate} | End: {project.endDate}
                     </small>
 
-                    {/* PROGRESS BAR */}
                     <div className="mt-3">
                       <ProgressBar
                         now={project.progress || 0}
                         label={`${project.progress || 0}%`}
-                        animated
-                        variant={
-                          project.progress < 40
-                            ? "danger"
-                            : project.progress < 70
-                            ? "warning"
-                            : "success"
-                        }
                       />
                     </div>
 
-                    {/* ASSIGNED WORKERS */}
+                    {/* WORKERS */}
                     {project.workers?.length > 0 && (
                       <>
                         <hr />
-                        <h6 className="fw-bold">👷 Workers</h6>
+                        <h6 className="fw-bold">👷 Assigned Workers</h6>
                         <ul className="list-group list-group-flush">
                           {project.workers.map((w) => (
                             <li key={w._id} className="list-group-item">
-                              {w.name} – {w.jobRole}
-                            </li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-
-                    {/* MATERIALS USED */}
-                    {project.materials?.length > 0 && (
-                      <>
-                        <hr />
-                        <h6 className="fw-bold">🧱 Materials</h6>
-                        <ul className="list-group list-group-flush">
-                          {project.materials.map((m) => (
-                            <li key={m._id} className="list-group-item">
-                              {m.productName} – Qty: {m.quantity}
+                              {w.name} – {w.jobrole}
                             </li>
                           ))}
                         </ul>

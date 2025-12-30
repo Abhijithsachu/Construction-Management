@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { Link, useNavigate } from "react-router-dom";
 import './Wrkhome.css'
+import api from '../../api';
 
 function Wrkhome() {
+  const LoginId = localStorage.getItem("LoginId");
   const navigate = useNavigate();
 
   // ✅ LOGOUT FUNCTION
@@ -13,6 +15,20 @@ function Wrkhome() {
     navigate("/");
   };
 
+   // Fetch worker id
+ const getWorker = async () => {
+    try {
+      const res = await api.get(`/worker/details/${LoginId}`);
+      console.log(res);
+      
+      localStorage.setItem('workerId', res.data.user._id);
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+    }
+  };
+  useEffect(()=>{
+    getWorker()
+  },[])
   return (
     <div className="container mt-4 user-home">
 

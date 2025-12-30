@@ -80,3 +80,45 @@ export const updateWorkerStatus = async (req, res) => {
     return res.status(500).json({ message: "Server side error" });
   }
 };
+
+
+
+export const getVerifiedWorkers = async (req, res) => {
+  try {
+    const verifiedWorkers = await WORKER.find()
+      .populate({
+        path: "commonkey",
+        match: { verify: true }, // ✅ only verified logins
+        select: "verify",
+      });
+
+    // populate match null aavunnav filter cheyyanam
+    const filteredWorkers = verifiedWorkers.filter(
+      (worker) => worker.commonkey !== null
+    );
+
+    return res.status(200).json(filteredWorkers);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server side error" });
+  }
+};
+
+export const getWorkerHome=async(req,res)=>{
+    const {id}=req.params
+    console.log(id);
+    try{
+        const user=await WORKER.findOne({commonkey:id})
+        if(!user){
+            return res.status(400).json({message:"Cannot find User"})
+        }
+        // console.log(user);
+         return res.status(200).json({user})
+
+        
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({message:"server side error"})
+    }
+  }

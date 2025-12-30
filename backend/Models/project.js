@@ -18,7 +18,19 @@ const projectSchema=new Schema({
     type:String,
         required:true,
     },
+    description:{
+        type:String,
+        required:true,
+    },
+    date:{
+        type:String,
+        required:true,
+    },
+    status:{
+        type:String,
+        default:'pending'
+    }
     
 })
-const projectData=mongoose.model("project",loginSchema)
+const projectData=mongoose.model("project",projectSchema)
 export default projectData

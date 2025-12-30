@@ -13,8 +13,11 @@ function Viewworkers() {
 
   const fetchAcceptedWorkers = async () => {
     try {
-      const res = await api.get("/worker/accepted"); // accepted workers API
+      const res = await api.get("/worker/verifiedworker"); // accepted workers API
       setWorkers(res.data);
+      console.log(res,"hhhh");
+      
+      
     } catch (error) {
       console.error(error);
     }
