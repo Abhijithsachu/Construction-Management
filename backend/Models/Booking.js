@@ -2,26 +2,30 @@ import mongoose, { Schema } from "mongoose";
 
 const bookingSchema=new Schema({
     
-    userid:{
+    userId:{
         type:Schema.Types.ObjectId,
         ref:"User",
     },
-    productid:{
+    productId:{
     type:Schema.Types.ObjectId,
         ref:"Product",
-    },
-    workerbooking:{
-        type:String,
-        required:true,
-    },
-    productbooking:{
-        type:String,
-        required:true,
     },
     quantity:{
         type:Number,
         required:true,
     },
+    totalamount:{
+        type:Number,
+        required:true,
+    },
+    address:{
+        type:String,
+        required:true
+    },
+    status:{
+        type:String,
+        default:"pending"
+    }
 })
 const bookingData=mongoose.model("Booking",bookingSchema)
 export default bookingData

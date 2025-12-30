@@ -38,9 +38,9 @@ function Login() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <NavDropdown title="Sign Up" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/signup/user">User</NavDropdown.Item>
-                <NavDropdown.Item href="/signup/vendor">Vendor</NavDropdown.Item>
-                <NavDropdown.Item href="/signup/worker">Worker</NavDropdown.Item>
+                <NavDropdown.Item href="/userregistration">User</NavDropdown.Item>
+                <NavDropdown.Item href="/venderregistration">Vendor</NavDropdown.Item>
+                <NavDropdown.Item href="/workerregistration">Worker</NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../api";
 
@@ -37,10 +36,7 @@ function Editproduct() {
     formData.append("description", description);
     if (photo) formData.append("photo", photo);
 
-    await api.put(
-      `/product/update/${id}`,
-      formData
-    );
+    await api.put(`/product/update/${id}`, formData);
 
     alert("Product Updated Successfully");
     navigate("/viewprdt");
@@ -48,7 +44,17 @@ function Editproduct() {
 
   return (
     <div className="container mt-4">
-      <h3>Edit Product</h3>
+      {/* BACK BUTTON */}
+      <div className="mb-3">
+        <button
+          onClick={() => navigate(-1)}
+          className="btn btn-light fw-bold"
+        >
+          ⬅ Back
+        </button>
+      </div>
+
+      <h3 className="mb-4">Edit Product</h3>
 
       <form onSubmit={handleSubmit}>
         <input
@@ -94,10 +100,7 @@ function Editproduct() {
           onChange={(e) => setPhoto(e.target.files[0])}
         />
 
-        <button className="btn btn-primary mt-3">
-          Update Product
-        </button>
-        
+        <button className="btn btn-primary mt-3">Update Product</button>
       </form>
     </div>
   );

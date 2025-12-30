@@ -1,19 +1,39 @@
 import React from 'react'
 import { Card, Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './Wrkhome.css'
 
 function Wrkhome() {
+  const navigate = useNavigate();
+
+  // ✅ LOGOUT FUNCTION
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
     <div className="container mt-4 user-home">
 
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold fade-in">Welcome to Construction Manager</h2>
-        <Link to="/profile">
-          <Button className="profile-btn">My Profile</Button>
-        </Link>
+        <h2 className="fw-bold fade-in">
+          Welcome to Construction Manager
+        </h2>
+
+        <div className="d-flex gap-2">
+          <Link to="/profile">
+            <Button className="profile-btn">
+              My Profile
+            </Button>
+          </Link>
+
+          {/* 🔴 LOGOUT */}
+          <Button variant="danger" onClick={handleLogout}>
+            Logout
+          </Button>
+        </div>
       </div>
 
       {/* Dashboard Cards */}
@@ -25,7 +45,7 @@ function Wrkhome() {
           { title: "Notifications", value: 4, color: "danger" }
         ].map((item, index) => (
           <div className="col-md-3 mb-3" key={index}>
-            <Card className="dashboard-card scale-hover">
+            <Card className="dashboard-card scale-hover text-center">
               <h5>{item.title}</h5>
               <h2 className={`text-${item.color}`}>{item.value}</h2>
             </Card>
@@ -43,7 +63,9 @@ function Wrkhome() {
         ].map((action, index) => (
           <div className="col-md-4 mb-3" key={index}>
             <Link to={action.link} className="no-link-style">
-              <Card className="quick-card hover-glow">{action.title}</Card>
+              <Card className="quick-card hover-glow text-center">
+                {action.title}
+              </Card>
             </Link>
           </div>
         ))}
@@ -61,13 +83,28 @@ function Wrkhome() {
           </tr>
         </thead>
         <tbody>
-          <tr><td>1</td><td>Requested 2 electricians for Site A</td><td>26 Nov 2025</td><td className="pending">Pending</td></tr>
-          <tr><td>2</td><td>Submitted safety issue report</td><td>24 Nov 2025</td><td className="resolved">Resolved</td></tr>
-          <tr><td>3</td><td>Viewed progress report for Project Delta</td><td>20 Nov 2025</td><td className="viewed">Viewed</td></tr>
+          <tr>
+            <td>1</td>
+            <td>Requested 2 electricians for Site A</td>
+            <td>26 Nov 2025</td>
+            <td className="pending">Pending</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Submitted safety issue report</td>
+            <td>24 Nov 2025</td>
+            <td className="resolved">Resolved</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Viewed progress report for Project Delta</td>
+            <td>20 Nov 2025</td>
+            <td className="viewed">Viewed</td>
+          </tr>
         </tbody>
       </Table>
     </div>
-  )
+  );
 }
 
-export default Wrkhome
+export default Wrkhome;

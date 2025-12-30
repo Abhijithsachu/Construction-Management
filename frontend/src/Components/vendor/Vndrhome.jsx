@@ -1,29 +1,44 @@
 import React, { useEffect } from 'react'
-import { Card, Row, Col, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Card, Row, Col, Container, Button } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import './Vndrhome.css'
 import api from '../../api';
+
 function Vndrhome() {
   const LoginId = localStorage.getItem("LoginId");
+  const navigate = useNavigate();
 
   // Fetch shop id
   const getShop = async () => {
     try {
       const res = await api.get(`/vendor/details/${LoginId}`);
-      localStorage.setItem('vendorId',res.data.shop._id)
-      console.log(res);
-      
+      localStorage.setItem('vendorId', res.data.shop._id);
     } catch (error) {
       console.error("Failed to fetch shop:", error);
     }
   };
-useEffect(()=>{
-  getShop()
-})
+
+  useEffect(() => {
+    getShop();
+  }, []);
+
+  // ✅ LOGOUT FUNCTION
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
-    
     <div className="vendor-home-page">
-      <Container className="mt-5">
+
+      {/* 🔴 LOGOUT BUTTON */}
+      <div className="d-flex justify-content-end p-3">
+        <Button variant="danger" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
+
+      <Container className="mt-3">
         <h2 className="text-center vendor-title">Vendor Dashboard</h2>
 
         <Row className="g-4 mt-4">
@@ -41,11 +56,11 @@ useEffect(()=>{
             </Card>
           </Col>
 
-          {/* Add Product Image */}
+          {/* Manage Product */}
           <Col md={4}>
             <Card className="vendor-card">
               <Card.Body className="text-center">
-                <Card.Title>View Product</Card.Title>
+                <Card.Title>Manage Product</Card.Title>
                 <p>Product details</p>
                 <Link to="/viewprdt" className="btn vendor-btn">
                   View
@@ -54,14 +69,14 @@ useEffect(()=>{
             </Card>
           </Col>
 
-          {/* Update Stock */}
+          {/* Update Status */}
           <Col md={4}>
             <Card className="vendor-card">
               <Card.Body className="text-center">
-                <Card.Title>Update Stock</Card.Title>
-                <p>Manage and update available stock quantities.</p>
-                <Link to="/vendor/updatestock" className="btn vendor-btn">
-                  Update Stock
+                <Card.Title>Update Status</Card.Title>
+                <p>Product Status Update</p>
+                <Link to="/VendorUpdateStatus" className="btn vendor-btn">
+                  View
                 </Link>
               </Card.Body>
             </Card>
@@ -73,7 +88,7 @@ useEffect(()=>{
               <Card.Body className="text-center">
                 <Card.Title>View Requests</Card.Title>
                 <p>Check material requests from users or admin.</p>
-                <Link to="/vendor/viewrequests" className="btn vendor-btn">
+                <Link to="/viewrequests" className="btn vendor-btn">
                   View Requests
                 </Link>
               </Card.Body>
@@ -86,7 +101,7 @@ useEffect(()=>{
               <Card.Body className="text-center">
                 <Card.Title>View Feedback</Card.Title>
                 <p>See feedback given by users for your services.</p>
-                <Link to="/vendor/viewfeedback" className="btn vendor-btn">
+                <Link to="/VendorViewFeedback" className="btn vendor-btn">
                   View Feedback
                 </Link>
               </Card.Body>
@@ -96,7 +111,7 @@ useEffect(()=>{
         </Row>
       </Container>
     </div>
-  )
+  );
 }
 
-export default Vndrhome
+export default Vndrhome;

@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import api from "../../api";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
 
 function Sendcomplaint() {
   const [subject, setSubject] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [complaints, setComplaints] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchComplaints();
   }, []);
 
-  // Fetch user complaints
   const fetchComplaints = async () => {
     try {
       const res = await api.get("/complaint/user");
@@ -23,7 +24,6 @@ function Sendcomplaint() {
     }
   };
 
-  // Submit complaint
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -54,8 +54,24 @@ function Sendcomplaint() {
         backgroundPosition: "center",
         minHeight: "100vh",
         paddingTop: "40px",
+        position: "relative", // Required for absolute Back button
       }}
     >
+      {/* BACK BUTTON */}
+      <Button
+        variant="light"
+        onClick={() => navigate(-1)}
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 10,
+          fontWeight: "bold",
+        }}
+      >
+        ⬅ Back
+      </Button>
+
       <div className="container">
         <h2 className="text-center fw-bold text-white mb-4">
           📢 Complaints

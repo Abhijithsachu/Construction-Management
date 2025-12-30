@@ -30,4 +30,25 @@ export const userregistration=async(req,res)=>{
         return res.status(500).json({message:"server side error"})
 
     }
-} 
+}
+
+export const getUserHome=async(req,res)=>{
+    const {id}=req.params
+    console.log(id);
+    try{
+        const user=await UserData.findOne({commonkey:id})
+        if(!user){
+            return res.status(400).json({message:"Cannot find User"})
+        }
+        // console.log(user);
+         return res.status(200).json({user})
+
+        
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({message:"server side error"})
+    }
+
+    
+}

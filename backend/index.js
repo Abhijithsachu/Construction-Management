@@ -6,6 +6,7 @@ import wrkrouter from "./Routes/workerRoute.js"
 import vendorrouter from "./Routes/vendorRoute.js"
 import authRouter from "./Routes/authRoute.js"
 import productRoute from "./Routes/productRoute.js"
+import bookingRoute from "./Routes/productbookingRoute.js"
 
 mongoose.connect("mongodb://localhost:27017/Construction").then(()=>{
     console.log("mongosedb connected successfully")
@@ -25,3 +26,5 @@ app.use("/api/worker",wrkrouter)
 app.use("/api/vendor",vendorrouter)
 app.use("/api/login",authRouter)
 app.use("/api/product",productRoute)
+app.use("/api/productbooking",bookingRoute)
+app.use("/api/viewproductbooking",bookingRoute)

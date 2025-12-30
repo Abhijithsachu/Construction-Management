@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
 import Button from 'react-bootstrap/Button';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Viewproduct() {
   const [products, setProducts] = useState([]);
   const vendorId = localStorage.getItem("vendorId");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -20,16 +21,17 @@ function Viewproduct() {
     }
   };
 
-  const handleDelete=async(id)=>{
-    try{
-        console.log(id);
-        const res=await api.delete(`/product/vendor/delete/${id}`)
-        console.log(res);
-        alert(res.data.message||"Deleted Sucessfully")
-        fetchProducts()
-        
-    }catch(e){console.log(e)}
-  }
+  const handleDelete = async (id) => {
+    try {
+      console.log(id);
+      const res = await api.delete(`/product/vendor/delete/${id}`);
+      console.log(res);
+      alert(res.data.message || "Deleted Successfully");
+      fetchProducts();
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div
@@ -43,6 +45,14 @@ function Viewproduct() {
       }}
     >
       <div className="container">
+
+        {/* BACK BUTTON */}
+        <div className="mb-3">
+          <Button variant="light" className="fw-bold" onClick={() => navigate(-1)}>
+            ⬅ Back
+          </Button>
+        </div>
+
         <h2 className="text-center fw-bold text-white mb-4">
           🏗️ My Products
         </h2>
@@ -87,7 +97,12 @@ function Viewproduct() {
                     >
                       ✏️ Edit Product
                     </Link>
-                    <Button variant="outline-danger mt-3 w-100" onClick={()=>handleDelete(item._id)} >Delete</Button>
+                    <Button
+                      variant="outline-danger mt-3 w-100"
+                      onClick={() => handleDelete(item._id)}
+                    >
+                      Delete
+                    </Button>
                   </div>
                 </div>
               </div>

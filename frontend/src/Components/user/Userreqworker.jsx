@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
 import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
 
 function ViewWorkers() {
   const [workers, setWorkers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchWorkers();
@@ -39,8 +41,24 @@ function ViewWorkers() {
         backgroundPosition: "center",
         minHeight: "100vh",
         paddingTop: "40px",
+        position: "relative",
       }}
     >
+      {/* BACK BUTTON */}
+      <Button
+        variant="light"
+        onClick={() => navigate(-1)}
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 10,
+          fontWeight: "bold",
+        }}
+      >
+        ⬅ Back
+      </Button>
+
       <div className="container">
         <h2 className="text-center fw-bold text-white mb-4">
           👷 Available Workers

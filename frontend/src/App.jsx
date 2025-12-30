@@ -17,13 +17,19 @@ import Wrkhome from './Components/worker/Wrkhome'
 import Addprd from './Components/vendor/Addprd'
 import Viewproduct from './Components/vendor/Viewproduct'
 import Editproduct from './Components/vendor/Editproduct'
-import UserViewProduct from './Components/user/Viewproduct'
+
 import RequestPrdct from './Components/user/RequestPrdct'
 import Userreqworker from './Components/user/Userreqworker'
 import Sendcomplaint from './Components/user/sendcomplaint'
 import Viewworkers from './Components/user/Viewworker'
 import Sendfeedback from './Components/user/Sendfeedback'
 import Projectdetails from './Components/user/Projectdetails'
+
+import VendorUpdateStatus from './Components/vendor/VendorUpdateStatus'
+import VendorViewFeedback from './Components/vendor/VendorViewFeedback'
+import VendorViewRequests from './Components/vendor/ViewreqPrdct'
+import UserViewProduct from './Components/user/UserViewproduct'
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -73,7 +79,10 @@ function App() {
         <Route path='/viewwrkrs' element={<Viewworkers/>}/>
         <Route path='/sendfeedback' element={<Sendfeedback/>}/>
         <Route path='/projectdetails' element={<Projectdetails/>}/>
-      </Routes>
+        <Route path='/viewrequests' element={<VendorViewRequests/>}/>
+        <Route path='/VendorUpdateStatus' element={<VendorUpdateStatus/>}/>
+        <Route path='/VendorViewFeedback' element={<VendorViewFeedback/>}/>
+    </Routes>
     </>
   )
 }

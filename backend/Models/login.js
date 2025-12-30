@@ -10,7 +10,13 @@ const loginSchema=new Schema({
         type:String,
         required:true,
     },
-    role:{type:String,}
+    role:{
+        type:String,required:true,
+    },
+    verify:{
+        type:Boolean,
+        default:false,
+    }
 })
 const loginData=mongoose.model("Login",loginSchema)
 export default loginData

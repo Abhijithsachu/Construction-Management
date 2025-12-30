@@ -48,8 +48,8 @@ export const workerregistration = async (req, res) => {
 };
 export const getallWorkers= async(req, res)=>{
   try{
-    const workerDetails=await WORKER.find()
-    console.log(workerDetails);
+    const workerDetails=await WORKER.find().populate('commonkey')
+    // console.log(workerDetails);
     
     return res.status(200).json({workerDetails});
   }
@@ -58,3 +58,25 @@ export const getallWorkers= async(req, res)=>{
     return res.status(500).json({ message:"Server Side Error"});
   }
 }
+export const updateWorkerStatus = async (req, res) => {
+  const { loginId } = req.params; // Login _id
+  const { verify } = req.body; // true or false
+
+  try {
+    const login = await loginData.findById(loginId);
+    if (!login) {
+      return res.status(404).json({ message: "Login record not found" });
+    }
+
+    login.verify = verify;
+    await login.save();
+
+    return res.status(200).json({
+      message: `Worker has been ${verify ? "approved" : "rejected"}`,
+      login,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server side error" });
+  }
+};

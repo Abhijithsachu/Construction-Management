@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Badge from "react-bootstrap/Badge";
+import { useNavigate } from "react-router-dom";
 
 function Projectdetails() {
   const [projects, setProjects] = useState([]);
@@ -14,6 +15,8 @@ function Projectdetails() {
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  const navigate = useNavigate();
 
   // Fetch all projects
   const fetchProjects = async () => {
@@ -65,8 +68,24 @@ function Projectdetails() {
         backgroundPosition: "center",
         minHeight: "100vh",
         paddingTop: "40px",
+        position: "relative", // Needed for absolute back button
       }}
     >
+      {/* BACK BUTTON */}
+      <Button
+        variant="light"
+        onClick={() => navigate(-1)}
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 10,
+          fontWeight: "bold",
+        }}
+      >
+        ⬅ Back
+      </Button>
+
       <div className="container">
         <h2 className="text-center fw-bold text-white mb-4">
           🏗️ Project Management

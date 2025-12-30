@@ -24,10 +24,12 @@ const workerSchema=new Schema({
     qualification:{
         type:String,
         required:true,
-    },   commonkey:{
+    },  
+     commonkey:{
        type:Schema.Types.ObjectId,
 
-    ref:"login"
+            ref:"Login",
+
     },
     
 })

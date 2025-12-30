@@ -1,7 +1,6 @@
-
-
 import React, { useEffect, useState } from "react";
 import api from "../../api";
+import { useNavigate } from "react-router-dom";
 
 function Addprd() {
   const [product, setProduct] = useState({
@@ -16,6 +15,7 @@ function Addprd() {
   const [shopId, setShopId] = useState("");
 
   const LoginId = localStorage.getItem("LoginId");
+  const navigate = useNavigate();
 
   // Fetch shop id
   const getShop = async () => {
@@ -64,29 +64,17 @@ function Addprd() {
     formData.append("photo", product.photo);
     formData.append("shopId", shopId);
 
-    // Debug FormData
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
-    // 🔹 API CALL (uncomment when backend is ready)
-
     try {
-     const res= await api.post("/product", formData, {
+      const res = await api.post("/product", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       console.log(res);
-      
       alert("Product added successfully!");
     } catch (err) {
-        console.log(err);
-        
+      console.log(err);
       alert(err.response?.data?.message || "Something went wrong");
       return;
     }
-
-
-    alert("Product added successfully!");
 
     // Reset form
     setProduct({
@@ -100,13 +88,21 @@ function Addprd() {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 position-relative">
+      {/* BACK BUTTON */}
+      <button
+        onClick={() => navigate(-1)}
+        className="btn btn-light fw-bold"
+        style={{ position: "absolute", top: "20px", left: "20px", zIndex: 10 }}
+      >
+        ⬅ Back
+      </button>
+
       <div className="card shadow">
         <div className="card-body">
           <h4 className="text-center mb-4">Add Product</h4>
 
           <form onSubmit={handleSubmit}>
-
             <div className="mb-3">
               <label className="form-label">Product Name</label>
               <input
@@ -180,7 +176,6 @@ function Addprd() {
             <button type="submit" className="btn btn-primary w-100">
               Add Product
             </button>
-
           </form>
         </div>
       </div>
