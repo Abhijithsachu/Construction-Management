@@ -56,7 +56,7 @@ function Userhome() {
           <Col md={4}>
             <Card className="user-card">
               <Card.Body className="text-center">
-                <Card.Title>Request Products</Card.Title>
+                <Card.Title>Requested Products</Card.Title>
                 <p>Send request to vendors for required materials.</p>
                 <Link to="/userreqprdct" className="btn user-btn">
                   Send Request
@@ -68,7 +68,7 @@ function Userhome() {
           <Col md={4}>
             <Card className="user-card">
               <Card.Body className="text-center">
-                <Card.Title>Request Worker</Card.Title>
+                <Card.Title>Requested Worker</Card.Title>
                 <p>Select worker category and rating to hire easily.</p>
                 <Link to="/userreqworker" className="btn user-btn">
                   Hire Worker
