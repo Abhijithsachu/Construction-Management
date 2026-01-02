@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Badge from "react-bootstrap/Badge";
+import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 
 function Projectdetails() {
@@ -13,22 +14,25 @@ function Projectdetails() {
   const [projects, setProjects] = useState([]);
   const [workers, setWorkers] = useState([]);
 
-  // form
+  // form states
   const [projectName, setProjectName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+
   const userId = localStorage.getItem("userId");
 
   /* ---------------- FETCH PROJECTS ---------------- */
   const fetchProjects = async () => {
     try {
-      const res = await api.get(`/projects/userproject/${userId}`);
+      const res = await api.get(`/project/userproject/${userId}`);
       setProjects(res.data.data);
-      console.log(res,"jjjj");
-      
+      console.log("Projects:", res.data.data);
     } catch (err) {
       console.error(err);
     }
@@ -54,20 +58,21 @@ function Projectdetails() {
   const handleAddProject = async (e) => {
     e.preventDefault();
     try {
-     let re= await api.post("/project/add", {
+      let re = await api.post("/project/add", {
         projectName,
         location,
         description,
         startDate,
+        endDate,
         workers: selectedWorker,
-        userId
+        userId,
       });
       console.log(re);
-      
+
       alert("Project added successfully");
       fetchProjects();
 
-      // reset
+      // reset form
       setProjectName("");
       setLocation("");
       setDescription("");
@@ -77,6 +82,14 @@ function Projectdetails() {
     } catch (err) {
       console.error(err);
       alert("Failed to add project");
+    }
+  };
+
+  /* ---------------- HANDLE PROJECT CLICK ---------------- */
+  const handleProjectClick = (project) => {
+    if (project.status === "accepted") {
+      setSelectedProject(project);
+      setShowModal(true);
     }
   };
 
@@ -189,7 +202,13 @@ function Projectdetails() {
           ) : (
             projects.map((project) => (
               <div className="col-lg-6" key={project._id}>
-                <div className="card shadow-lg border-0 h-100">
+                <div
+                  className="card shadow-lg border-0 h-100"
+                  style={{
+                    cursor: project.status === "accepted" ? "pointer" : "default",
+                  }}
+                  onClick={() => handleProjectClick(project)}
+                >
                   <div className="card-body">
                     <h5 className="fw-bold">{project.projectName}</h5>
 
@@ -197,9 +216,7 @@ function Projectdetails() {
                       {project.location}
                     </Badge>
 
-                    <p className="text-muted mt-2">
-                      {project.description}
-                    </p>
+                    <p className="text-muted mt-2">{project.description}</p>
 
                     <small>
                       Start: {project.startDate} | End: {project.endDate}
@@ -233,6 +250,59 @@ function Projectdetails() {
           )}
         </div>
       </div>
+
+      {/* ---------------- POPUP MODAL FOR ACCEPTED PROJECTS ---------------- */}
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>📋 Project Details</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          {selectedProject && (
+            <>
+              <p>
+                <strong>Project:</strong> {selectedProject.projectName}
+              </p>
+              <p>
+                <strong>Location:</strong> {selectedProject.location}
+              </p>
+              <p>
+                <strong>Description:</strong> {selectedProject.description}
+              </p>
+              <p>
+                <strong>Status:</strong>{" "}
+                <Badge bg="success">{selectedProject.status}</Badge>
+              </p>
+
+              <hr />
+
+              {/* 👷 STAFF DETAILS */}
+              <h6 className="fw-bold">👷 Staff Added</h6>
+              {selectedProject.staff?.length > 0 ? (
+                <ul className="list-group">
+                  {selectedProject.staff.map((s, index) => (
+                    <li key={index} className="list-group-item">
+                      👤 {s.name} — 📞 {s.phone}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-muted">No staff added yet</p>
+              )}
+            </>
+          )}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

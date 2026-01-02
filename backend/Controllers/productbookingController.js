@@ -119,11 +119,11 @@ console.log(booking);
     }
 
     // Only pending can be updated
-    if (booking.status !== "pending") {
-      return res
-        .status(400)
-        .json({ message: "Booking already processed" });
-    }
+    // if (booking.status !== "pending") {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Booking already processed" });
+    // }
 
     booking.status = status;
     await booking.save();

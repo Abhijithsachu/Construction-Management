@@ -113,3 +113,49 @@ export const allproducts=async(req,res)=>{
        return res.status(500).json({ message: e.message });
     }
 }
+
+export const addProductReview = async (req, res) => {
+    const { productId } = req.params;
+    const { userId, rating, review } = req.body;
+
+    if (!userId || !rating) {
+        return res.status(400).json({ message: "userId and rating are required" });
+    }
+
+    try {
+        const product = await productData.findById(productId);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        // Check if user already reviewed
+        const existingReview = product.rating.reviews.find(
+            (r) => r.userId.toString() === userId
+        );
+
+        if (existingReview) {
+            // Update existing review
+            existingReview.rating = rating;
+            existingReview.review = review || "";
+            existingReview.createdAt = new Date();
+        } else {
+            // Add new review
+            product.rating.reviews.push({ userId, rating, review });
+        }
+
+        // Recalculate totalRating and avgrating
+        const total = product.rating.reviews.reduce((acc, r) => acc + r.rating, 0);
+        product.rating.totalRating = total;
+        product.rating.avgrating = total / product.rating.reviews.length;
+
+        await product.save();
+
+        return res.status(200).json({
+            message: "Review added/updated successfully",
+            rating: product.rating,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};

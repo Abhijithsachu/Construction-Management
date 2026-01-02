@@ -92,7 +92,7 @@ function Viewworkers() {
                     </div>
 
                     <p className="small mb-1">
-                      📞 {item.phone}
+                      📞 {item.phoneNo}
                     </p>
 
                     <p className="small text-muted mb-0">

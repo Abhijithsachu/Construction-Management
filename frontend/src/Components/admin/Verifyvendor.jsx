@@ -78,27 +78,32 @@ console.log(vendors);
                 <td>{vendor.Name}</td>
                 <td>{vendor.phoneNo}</td>
                 <td>{vendor.email}</td>
-                <td>
-                  <Button
-                    variant="success"
-                    size="sm"
-                    className="me-2"
-                    onClick={() =>
-                      handleAccept(vendor.commonkey._id)
-                    }
-                  >
-                    Unblock
-                  </Button>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() =>
-                      handleReject(vendor.commonkey._id)
-                    }
-                  >
-                    Block
-                  </Button>
-                </td>
+<td>
+  {vendor.commonkey.verify ? (
+    <>
+      <p>Unbloked</p>
+      <Button
+        variant="danger"
+        size="sm"
+        onClick={() => handleReject(vendor.commonkey._id)}
+      >
+        Block
+      </Button>
+    </>
+  ) : (
+    <>
+      <p>Blocked</p>
+      <Button
+        variant="success"
+        size="sm"
+        onClick={() => handleAccept(vendor.commonkey._id)}
+      >
+        Unblock
+      </Button>
+    </>
+  )}
+</td>
+
               </tr>
             ))
           ) : (

@@ -100,6 +100,71 @@ export const updateProjectStatus = async (req, res) => {
 };
 
 
+export const getAcceptedProjectsForWorker = async (req, res) => {
+  const { id } = req.params; // worker ID
+console.log(id);
+
+  try {
+    const worker = await WORKER.findById(id);
+    if (!worker) {
+      return res.status(404).json({ message: "Worker not found" });
+    }
+
+    // Fetch projects assigned to the worker with status 'accepted'
+    const acceptedProjects = await projectData.find({
+      workerID: id,
+      status: "accepted",
+    });
+
+    return res.status(200).json({ data: acceptedProjects });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+export const addstaff = async (req, res) => {
+  try {
+    const { projectId, workers } = req.body; // workers = staff list
+
+    if (!projectId || !workers || !workers.length) {
+      return res.status(400).json({ message: "Invalid data" });
+    }
+
+    const project = await projectData.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    // 🔒 Ensure project is accepted
+    if (project.status !== "accepted") {
+      return res
+        .status(403)
+        .json({ message: "Project not accepted yet" });
+    }
+
+    // 🔹 Validate staff data
+    for (let staff of workers) {
+      if (!staff.name || !staff.phone) {
+        return res
+          .status(400)
+          .json({ message: "Staff name and phone required" });
+      }
+    }
+
+    // 🔹 Add staff under main worker
+    project.staff.push(...workers) ; // overwrite OR use push if needed
+    await project.save();
+
+    return res.status(200).json({
+      message: "Staff added successfully",
+      project,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 

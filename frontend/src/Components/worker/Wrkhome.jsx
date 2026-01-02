@@ -74,7 +74,7 @@ function Wrkhome() {
       <div className="row mb-4">
         {[
           { title: "View All Projects", link: "/projects" },
-          { title: "Request Worker", link: "/requestworker" },
+          { title: "Request Worker", link: "/addworker" },
           { title: "Report Site Issue", link: "/issues" }
         ].map((action, index) => (
           <div className="col-md-4 mb-3" key={index}>

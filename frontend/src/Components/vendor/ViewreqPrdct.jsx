@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Table, Badge, Button } from "react-bootstrap";
+import { Container, Row, Col, Card, Table, Badge, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 
@@ -11,9 +11,7 @@ function VendorViewRequests() {
 
   const fetchRequests = async () => {
     try {
-      const res = await api.get(
-        `/viewproductbooking/viewbooking/${vendorId}`
-      );
+      const res = await api.get(`/viewproductbooking/viewbooking/${vendorId}`);
       setRequests(res.data.filterBookings);
     } catch (error) {
       console.error("Error fetching requests", error);
@@ -24,11 +22,11 @@ function VendorViewRequests() {
     fetchRequests();
   }, []);
 
-  // 🔥 STATUS UPDATE FUNCTION
-  const updateStatus = async (bookingId, status) => {
+  // 🔥 UPDATE STATUS
+  const updateStatus = async (bookingId, newStatus) => {
     try {
       await api.put(`/viewproductbooking/updatestatus/${bookingId}`, {
-        status: status,
+        status: newStatus,
       });
       fetchRequests();
     } catch (error) {
@@ -42,29 +40,38 @@ function VendorViewRequests() {
       ? requests
       : requests.filter((req) => req.status === filterStatus);
 
+  // Define the allowed next statuses in order
+  const nextStatusMap = {
+    pending: "Approved",
+    Approved: "Packed",
+    Packed: "Shipped",
+    Shipped: "Delivered",
+    Delivered: "Delivered", // no further change
+    Rejected: "Rejected",
+  };
+
   return (
     <div className="bg-light min-vh-100 py-5">
       <Container>
         <div className="mb-3 d-flex justify-content-between align-items-center">
-          <Button
-            variant="light"
-            className="fw-bold"
-            onClick={() => navigate(-1)}
-          >
+          <Button variant="light" className="fw-bold" onClick={() => navigate(-1)}>
             ⬅ Back
           </Button>
 
           {/* 🔽 FILTER */}
-          <select
-            className="form-select w-auto fw-bold"
+          <Form.Select
+            className="w-auto fw-bold"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
             <option value="All">All</option>
-            <option value="Pending">Pending</option>
+            <option value="pending">Pending</option>
             <option value="Approved">Approved</option>
+            <option value="Packed">Packed</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
             <option value="Rejected">Rejected</option>
-          </select>
+          </Form.Select>
         </div>
 
         <h2 className="text-center fw-bold text-primary mb-4">
@@ -75,12 +82,7 @@ function VendorViewRequests() {
           <Col>
             <Card className="shadow border-0">
               <Card.Body>
-                <Table
-                  responsive
-                  bordered
-                  hover
-                  className="text-center align-middle"
-                >
+                <Table responsive bordered hover className="text-center align-middle">
                   <thead className="table-primary">
                     <tr>
                       <th>#</th>
@@ -104,9 +106,7 @@ function VendorViewRequests() {
                           <td>
                             <strong>{req.userId?.name}</strong>
                             <br />
-                            <small className="text-muted">
-                              {req.userId?.email}
-                            </small>
+                            <small className="text-muted">{req.userId?.email}</small>
                           </td>
 
                           <td>{req.productId?.productname}</td>
@@ -118,43 +118,31 @@ function VendorViewRequests() {
                           <td>
                             <Badge
                               bg={
-                                req.status === "Approved"
+                                req.status === "Delivered"
                                   ? "success"
                                   : req.status === "Rejected"
                                   ? "danger"
-                                  : "warning"
+                                  : req.status === "warning" || req.status === "pending"
+                                  ? "warning"
+                                  : "info"
                               }
                             >
                               {req.status}
                             </Badge>
                           </td>
 
-                          {/* ✅ ACTION BUTTONS */}
+                          {/* 🔹 NEXT STATUS BUTTON */}
                           <td>
-                            {req.status === "Pending" ? (
-                              <>
-                                <Button
-                                  variant="success"
-                                  size="sm"
-                                  className="me-2"
-                                  onClick={() =>
-                                    updateStatus(req._id, "Approved")
-                                  }
-                                >
-                                  Accept
-                                </Button>
-                                <Button
-                                  variant="danger"
-                                  size="sm"
-                                  onClick={() =>
-                                    updateStatus(req._id, "Rejected")
-                                  }
-                                >
-                                  Reject
-                                </Button>
-                              </>
+                            {req.status !== "Delivered" && req.status !== "Rejected" ? (
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={() => updateStatus(req._id, nextStatusMap[req.status])}
+                              >
+                                Move to "{nextStatusMap[req.status]}"
+                              </Button>
                             ) : (
-                              <Badge bg="secondary">Completed</Badge>
+                              <Badge bg="secondary">No Action</Badge>
                             )}
                           </td>
                         </tr>

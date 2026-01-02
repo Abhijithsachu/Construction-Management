@@ -3,6 +3,7 @@ import api from "../../api";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import Badge from "react-bootstrap/Badge";
 import { useNavigate } from "react-router-dom";
 
 function UserViewProduct() {
@@ -46,12 +47,7 @@ function UserViewProduct() {
     selectedProduct ? selectedProduct.price * quantity : 0;
 
   const handleSubmitRequest = async () => {
-    // if (!selectedProduct) return;
-
-    // if (!address.trim()) {
-    //   alert("Please enter delivery address");
-    //   return;
-    // }
+    if (!selectedProduct) return;
 
     try {
       const body = {
@@ -62,10 +58,9 @@ function UserViewProduct() {
         totalPrice: totalPrice,
         address: address,
       };
-console.log('hit');
 
-     let res=await api.post("/productbooking/add", body);
-console.log (res,"pppppp")
+      let res = await api.post("/productbooking/add", body);
+      console.log(res);
       alert("Quote request submitted successfully ✅");
       handleClose();
     } catch (error) {
@@ -81,6 +76,21 @@ console.log (res,"pppppp")
       item.price?.toString().includes(term)
     );
   });
+
+  // ⭐ Function to render stars
+  const renderStars = (avgRating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= Math.floor(avgRating)) {
+        stars.push(<span key={i} style={{ color: "#FFD700" }}>★</span>);
+      } else if (i - avgRating < 1) {
+        stars.push(<span key={i} style={{ color: "#FFD700" }}>☆</span>);
+      } else {
+        stars.push(<span key={i} style={{ color: "#FFD700" }}>☆</span>);
+      }
+    }
+    return stars;
+  };
 
   return (
     <>
@@ -146,6 +156,17 @@ console.log (res,"pppppp")
                       <p className="card-text text-muted small">
                         {item.Description}
                       </p>
+
+                      {/* ⭐ Average Rating */}
+                      {item.rating?.avgrating > 0 && (
+                        <div className="mb-2">
+                          <strong>Rating: </strong>
+                          {renderStars(item.rating.avgrating)}
+                          <span className="text-muted ms-2">
+                            ({item.rating.reviews.length})
+                          </span>
+                        </div>
+                      )}
 
                       <div className="d-flex justify-content-between mb-3">
                         <span className="badge bg-warning text-dark fs-6">

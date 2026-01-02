@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
-import { Card, Badge, ProgressBar, Button } from "react-bootstrap";
+import { Card, Badge, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function ViewProject() {
   const [projects, setProjects] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+
   const navigate = useNavigate();
   const workerId = localStorage.getItem("workerId");
 
@@ -15,13 +18,14 @@ function ViewProject() {
   const fetchProjects = async () => {
     try {
       const res = await api.get(`/project/workerproject/${workerId}`);
+      console.log(res);
+      
       setProjects(res.data.data);
     } catch (error) {
       console.log(error);
     }
   };
-
-  // ✅ ACCEPT PROJECT
+  
   const handleAccept = async (projectId) => {
     try {
       await api.put(`/project/status/${projectId}`, {
@@ -33,7 +37,6 @@ function ViewProject() {
     }
   };
 
-  // ❌ REJECT PROJECT
   const handleReject = async (projectId) => {
     try {
       await api.put(`/project/status/${projectId}`, {
@@ -42,6 +45,14 @@ function ViewProject() {
       fetchProjects();
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  // ✅ Open popup ONLY for accepted projects
+  const handleProjectClick = (project) => {
+    if (project.status === "accepted") {
+      setSelectedProject(project);
+      setShowModal(true);
     }
   };
 
@@ -73,7 +84,14 @@ function ViewProject() {
         ) : (
           projects.map((project) => (
             <div className="col-md-6 col-lg-4" key={project._id}>
-              <Card className="shadow-lg border-0 h-100">
+              <Card
+                className="shadow-lg border-0 h-100"
+                style={{
+                  cursor:
+                    project.status === "accepted" ? "pointer" : "default",
+                }}
+                onClick={() => handleProjectClick(project)}
+              >
                 <Card.Body>
                   <Card.Title className="fw-bold">
                     {project.projectname}
@@ -101,20 +119,25 @@ function ViewProject() {
                     📍 {project.location}
                   </p>
 
-                  {/* ACTION BUTTONS */}
                   {project.status === "pending" ? (
                     <div className="d-flex gap-2">
                       <Button
                         variant="success"
                         size="sm"
-                        onClick={() => handleAccept(project._id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAccept(project._id);
+                        }}
                       >
                         Accept
                       </Button>
                       <Button
                         variant="danger"
                         size="sm"
-                        onClick={() => handleReject(project._id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleReject(project._id);
+                        }}
                       >
                         Reject
                       </Button>
@@ -135,6 +158,49 @@ function ViewProject() {
           ))
         )}
       </div>
+
+      {/* ✅ POPUP MODAL */}
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Project Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedProject && (
+            <>
+              <p><strong>Name:</strong> {selectedProject.projectname}</p>
+              <p><strong>Description:</strong> {selectedProject.description}</p>
+              <p><strong>Location:</strong> {selectedProject.location}</p>
+              <p><strong>Status:</strong> {selectedProject.status}</p>
+              
+             <hr />
+
+      {selectedProject.staff?.length > 0 ? (
+        <>
+          <p><strong>Staff Members:</strong></p>
+          <ul>
+            {selectedProject.staff.map((member, index) => (
+              <li key={index}>
+                👤 {member.name} — 📞 {member.phone}
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>No staff added</p>
+      )}
+    </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

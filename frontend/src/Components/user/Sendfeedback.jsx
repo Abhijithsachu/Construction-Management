@@ -1,26 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../api";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 
 function Sendfeedback() {
+  const [projects, setProjects] = useState([]);
+  const [projectId, setProjectId] = useState("");
   const [subject, setSubject] = useState("");
   const [rating, setRating] = useState("");
   const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
 
+  // 🔹 Fetch user's projects
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await api.get("/project/myprojects"); 
+        setProjects(res.data.projects); // adjust key if backend differs
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // 🔹 Submit feedback
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const res = await api.post("/feedback", {
+        projectId,
         subject,
         rating,
         message,
       });
 
       alert(res.data.message || "Feedback sent successfully");
+
+      // reset form
+      setProjectId("");
       setSubject("");
       setRating("");
       setMessage("");
@@ -39,10 +61,10 @@ function Sendfeedback() {
         backgroundPosition: "center",
         minHeight: "100vh",
         paddingTop: "40px",
-        position: "relative", // Needed for absolute Back button
+        position: "relative",
       }}
     >
-      {/* BACK BUTTON */}
+      {/* 🔙 Back Button */}
       <Button
         variant="light"
         onClick={() => navigate(-1)}
@@ -69,6 +91,24 @@ function Sendfeedback() {
 
                 <Form onSubmit={handleSubmit}>
 
+                  {/* 🔹 Project Dropdown */}
+                  <Form.Group className="mb-3">
+                    <Form.Label>Select Project</Form.Label>
+                    <Form.Select
+                      value={projectId}
+                      onChange={(e) => setProjectId(e.target.value)}
+                      required
+                    >
+                      <option value="">Select a project</option>
+                      {projects.map((project) => (
+                        <option key={project._id} value={project._id}>
+                          {project.projectName}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+
+                  {/* 🔹 Subject */}
                   <Form.Group className="mb-3">
                     <Form.Label>Feedback Subject</Form.Label>
                     <Form.Control
@@ -80,6 +120,7 @@ function Sendfeedback() {
                     />
                   </Form.Group>
 
+                  {/* 🔹 Rating */}
                   <Form.Group className="mb-3">
                     <Form.Label>Rating</Form.Label>
                     <Form.Select
@@ -96,6 +137,7 @@ function Sendfeedback() {
                     </Form.Select>
                   </Form.Group>
 
+                  {/* 🔹 Message */}
                   <Form.Group className="mb-4">
                     <Form.Label>Feedback Message</Form.Label>
                     <Form.Control
@@ -108,6 +150,7 @@ function Sendfeedback() {
                     />
                   </Form.Group>
 
+                  {/* 🔹 Submit */}
                   <div className="d-grid">
                     <Button
                       type="submit"
@@ -125,7 +168,6 @@ function Sendfeedback() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

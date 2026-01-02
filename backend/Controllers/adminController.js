@@ -1,4 +1,5 @@
 import loginData from "../Models/login.js";
+import projectData from "../Models/project.js";
 import UserData from "../Models/User.js";
 import VENDOR from "../Models/Venndor.js";
 
@@ -57,3 +58,19 @@ export const BlockingVendors = async (req, res) => {
     return res.status(500).json({ message: "Server side error" });
   }
 };
+
+export const viewProject=async (req,res)=>{
+    try{
+        const project=await projectData.find().sort({createdAt:-1}).populate("workerID").populate("userid")
+        if(!project){
+            return res.status(400).json({message:"Cannot find Project"})
+        }
+        // console.log(user);
+         return res.status(200).json({project})
+
+}
+ catch(error){
+        console.log(error)
+        return res.status(500).json({message:"server side error"})
+    }
+}

@@ -1,25 +1,49 @@
-.login-background {
-  background-image: url('https://images.unsplash.com/photo-1560185127-6e3b05d45d7a?auto=format&fit=crop&w=1950&q=80');
-  background-size: cover;
-  background-position: center;
+/* Full background */
+.login-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #579ae2, #bacfbb);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
 }
 
-.login-card {
-  background: rgba(255, 255, 255, 0.9);
-  min-width: 300px;
-  max-width: 400px;
-  width: 100%;
+/* Glassmorphism card */
+.login-glass {
+  width: 380px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: white;
 }
 
-.login-card h3 {
-  font-weight: bold;
+/* Inputs */
+.form-control {
+  background: transparent !important;
+  color: white !important;
+  border-left: none;
 }
 
-.login-card .form-control {
-  border-radius: 0.5rem;
+.form-control::placeholder {
+  color: #ddd;
 }
 
-.login-card .btn-primary {
-  border-radius: 0.5rem;
-  font-weight: bold;
+.input-group-text {
+  border-right: none;
+}
+
+/* Login button */
+.login-btn {
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+  border: none;
+  padding: 10px;
+  font-weight: 600;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
 }

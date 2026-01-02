@@ -24,7 +24,19 @@ const productSchema=new Schema({
     Description:{
         type:String,
         required:true,
-    }
+    },rating: {
+    avgrating: { type: Number, default: 0 },
+    totalRating: { type: Number, default: 0 },
+    reviews: [
+        {
+            userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+            rating: { type: Number, required: true, min: 1, max: 5 },
+            review: { type: String },
+            createdAt: { type: Date, default: Date.now },
+        }
+    ]
+}
+
 
 
 

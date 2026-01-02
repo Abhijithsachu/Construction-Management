@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import api from "../../api";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 
 function RequestPrdct() {
   const [products, setProducts] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [review, setReview] = useState("");
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
@@ -23,7 +29,7 @@ function RequestPrdct() {
     }
   };
 
-  // ✅ CANCEL BOOKING
+  // CANCEL BOOKING
   const handleCancel = async (bookingId) => {
     try {
       await api.put(`/productbooking/cancel/${bookingId}`);
@@ -35,7 +41,34 @@ function RequestPrdct() {
     }
   };
 
-  // ✅ STATUS BADGE
+  // OPEN RATING MODAL
+  const handleOpenRating = (product) => {
+    setSelectedProduct(product);
+    setRating(5); // default rating
+    setReview("");
+    setShowRatingModal(true);
+  };
+
+  // SUBMIT RATING
+  const handleSubmitRating = async () => {
+    if (!selectedProduct) return;
+
+    try {
+      await api.post(`/product/rate/${selectedProduct.productId._id}`, {
+        userId,
+        rating,
+        review,
+      });
+      alert("Thank you for your feedback ⭐");
+      setShowRatingModal(false);
+      fetchProducts();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to submit rating");
+    }
+  };
+
+  // STATUS BADGE
   const getStatusBadge = (status) => {
     switch (status) {
       case "pending":
@@ -53,7 +86,7 @@ function RequestPrdct() {
     }
   };
 
-  // ✅ FILTER LOGIC
+  // FILTER LOGIC
   const filteredProducts =
     filterStatus === "All"
       ? products
@@ -91,7 +124,7 @@ function RequestPrdct() {
           📦 My Requested Products
         </h2>
 
-        {/* 🔽 FILTER */}
+        {/* FILTER */}
         <div className="d-flex justify-content-end mb-4">
           <select
             className="form-select w-auto fw-bold"
@@ -130,9 +163,7 @@ function RequestPrdct() {
                       {item.productId?.Description}
                     </p>
 
-                    <div className="mb-2">
-                      Status: {getStatusBadge(item.status)}
-                    </div>
+                    <div className="mb-2">Status: {getStatusBadge(item.status)}</div>
 
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <span className="badge bg-success fs-6">
@@ -144,19 +175,30 @@ function RequestPrdct() {
                     </div>
 
                     <div className="mb-3">
-                      <Badge bg="secondary">
-                        Quantity: {item.quantity}
-                      </Badge>
+                      <Badge bg="secondary">Quantity: {item.quantity}</Badge>
                     </div>
 
-                    <Button
-                      variant="outline-danger"
-                      className="mt-auto fw-bold w-100"
-                      disabled={item.status !== "pending"}
-                      onClick={() => handleCancel(item._id)}
-                    >
-                      Cancel Booking
-                    </Button>
+                    {/* CANCEL BUTTON */}
+                 {item.status === "pending" && (
+  <Button
+    variant="outline-danger"
+    className="mt-auto fw-bold w-100 mb-2"
+    onClick={() => handleCancel(item._id)}
+  >
+    Cancel Booking
+  </Button>
+)}
+
+                    {/* RATE & REVIEW BUTTON (only if Delivered) */}
+                    {item.status === "Delivered" && (
+                      <Button
+                        variant="outline-success"
+                        className="fw-bold w-100"
+                        onClick={() => handleOpenRating(item)}
+                      >
+                        Rate & Review
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -164,6 +206,42 @@ function RequestPrdct() {
           )}
         </div>
       </div>
+
+      {/* RATING MODAL */}
+      <Modal show={showRatingModal} onHide={() => setShowRatingModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Rate & Review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Rating</Form.Label>
+              <Form.Select
+                value={rating}
+                onChange={(e) => setRating(Number(e.target.value))}
+              >
+                <option value={5}>5 - Excellent</option>
+                <option value={4}>4 - Good</option>
+                <option value={3}>3 - Average</option>
+                <option value={2}>2 - Poor</option>
+                <option value={1}>1 - Bad</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Review</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="success" onClick={handleSubmitRating}>
+              Submit
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

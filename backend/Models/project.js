@@ -29,7 +29,13 @@ const projectSchema=new Schema({
     status:{
         type:String,
         default:'pending'
+    }, // 👥 STAFF ADDED BY MAIN WORKER
+  staff: [
+    {
+      name: { type: String, required: true },
+      phone: { type: String, required: true },
     }
+  ],
     
 })
 const projectData=mongoose.model("project",projectSchema)

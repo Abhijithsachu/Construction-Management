@@ -31,4 +31,4 @@ app.use("/api/product",productRoute)
 app.use("/api/productbooking",bookingRoute)
 app.use("/api/viewproductbooking",bookingRoute)
 app.use("/api/project",projectdetail)
-app.use("/api/projects",projectdetail)
+

@@ -79,6 +79,24 @@ function HomePage() {
             </Card>
           </Col>
 
+          {/* projects Card */}
+          <Col md={4}>
+            <Card className="p-3 shadow-lg border-0 rounded-4 hover-shadow">
+              <Card.Body className="text-center">
+                <Card.Title className="fw-semibold fs-5">
+                  Projects
+                </Card.Title>
+                <h3 className="text-success fw-bold mt-2">75</h3>
+                <Link
+                  to="/viewprojects"
+                  className="btn btn-success mt-3 px-4 rounded-pill"
+                >
+                  View Projects
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>  
+
         </Row>
       </Container>
     </div>
