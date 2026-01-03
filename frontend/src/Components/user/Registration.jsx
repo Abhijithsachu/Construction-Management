@@ -1,92 +1,54 @@
-  import React, { useState } from 'react'
-  import './Registration.css'
-import api from '../../api'
-  function Registration() {
-    const [name,setname]=useState()
-    const [email,setemail]=useState()
-    const [phone,setphone]=useState()
-    const [password,setpassword]=useState()
-    const [confirmpassword,setconfirmpassword]=useState()
-    const handlesubmit=async(e)=>{
-      console.log('00000000000');
-      
-      e.preventDefault()
-      const body={name,email,phone,password}
-      console.log(body);
-      
-    const res= await api.post("/user/register",body)
-    console.log(res)
-    
-  
-  }
+import React, { useState } from 'react';
+import './Registration.css';
+import api from '../../api';
 
-        return (
-      <div className='Registrationpage'>
-          {/* <img src="login image.jpg" className="loginimage" alt="login image"/> */}
-          <form className="registrationform" onSubmit={handlesubmit}>
-          <h1 className='Registrationheading'>Registration</h1>
-          <table>
-            <tr>
-              <td>
-        <label className="fullname">Full Name </label>
+function Registration() {
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
 
-              </td>
-              <td>
-        <input type='text'onChange={(e)=>{setname(e.target.value)}}></input> <br/>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const body = { name, email, phone, password };
+    try {
+      const res = await api.post("/user/register", body);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-              </td>
-            </tr>
+  return (
+    <div className="registration-page">
+      {/* Background Shapes & Vignette */}
+      <div className="bg-shape one"></div>
+      <div className="bg-shape two"></div>
+      <div className="bg-shape three"></div>
+      <div className="vignette"></div>
 
-            <tr>
-              <td>
-                <label className="Email">Email  </label>
-              </td>
-              <td>
-                <input type='email'onChange={(e)=>{setemail(e.target.value)}}></input><br/>
-              </td>
-            </tr>
+      <form className="registration-form" onSubmit={handleSubmit}>
+        <h1 className="registration-heading">User Registration</h1>
+        <label>Full Name</label>
+        <input type="text" onChange={(e) => setName(e.target.value)} />
 
-            <tr>
-              <td>
-                <label className="phone">Phone </label>
-              </td>
-              <td>
-                <input type='tel'onChange={(e)=>{setphone(e.target.value)}}></input><br/>
-              </td>
-            </tr>
+        <label>Email</label>
+        <input type="email" onChange={(e) => setEmail(e.target.value)} />
 
-            <tr>
-              <td>
-                <label className="password">Password </label>
-              </td>
-              <td>
-                <input type='password'onChange={(e)=>{setpassword(e.target.value)}}></input><br/>
-              </td>
-            </tr>
-        
-            <tr>
-              <td>
-                <label className="confirmpassword">Confirm Password</label>
-              </td>
-              <td>
-                <input type='password'onChange={(e)=>{setconfirmpassword(e.target.value)}}></input><br/>
-              </td>
-            </tr>
-        
-      
-      
-        
-      
-        </table>
-        <button type='submit'>Registration</button>
-      
-        
+        <label>Phone</label>
+        <input type="tel" onChange={(e) => setPhone(e.target.value)} />
 
+        <label>Password</label>
+        <input type="password" onChange={(e) => setPassword(e.target.value)} />
 
+        <label>Confirm Password</label>
+        <input type="password" onChange={(e) => setConfirmPassword(e.target.value)} />
+
+        <button type="submit">Register</button>
       </form>
-      </div>
-      
-    )
-  }
+    </div>
+  );
+}
 
-  export default Registration
+export default Registration;

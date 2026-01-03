@@ -1,18 +1,35 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import './Userhome.css'
-import api from '../../api';
+import {
+  FaBoxOpen,
+  FaClipboardList,
+  FaHardHat,
+  FaExclamationTriangle,
+  FaUsers,
+  FaStar,
+  FaProjectDiagram,
+  FaSignOutAlt,
+  FaUserCircle,
+} from "react-icons/fa";
+import "./Userhome.css";
+import api from "../../api";
 
 function Userhome() {
-  const LoginId = localStorage.getItem("LoginId");
+  const [user, setUser] = useState('');
+  const LoginId = localStorage.getItem("ULoginId");
+  console.log(LoginId);
+  
   const navigate = useNavigate();
 
-  // Fetch user id
   const getUser = async () => {
     try {
       const res = await api.get(`/user/details/${LoginId}`);
-      localStorage.setItem('userId', res.data.user._id);
+      console.log(res);
+      
+      localStorage.setItem("userId", res.data.user._id);
+      setUser(res.data.user); // Save user details in state
+
     } catch (error) {
       console.error("Failed to fetch user:", error);
     }
@@ -22,111 +39,112 @@ function Userhome() {
     getUser();
   }, []);
 
-  // ✅ LOGOUT
   const handleLogout = () => {
     localStorage.clear();
     navigate("/");
   };
+console.log(user);
 
   return (
-    <div className="user-home-page">
-      {/* 🔴 LOGOUT BUTTON */}
-      <div className="d-flex justify-content-end p-3">
-        <Button variant="danger" onClick={handleLogout}>
-          Logout
-        </Button>
+    <div className="user-dashboard">
+      {/* Premium Background Shapes */}
+      <div className="bg-shape one"></div>
+      <div className="bg-shape two"></div>
+      <div className="bg-shape three"></div>
+      <div className="vignette"></div>
+
+      <div className="page-wrapper">
+        {/* ===== HEADER ===== */}
+        <div className="dashboard-header">
+          <h2>
+            <FaHardHat className="me-2 text-warning" />
+            {user.name} Dashboard
+          </h2>
+          <Button className="logout-btn" onClick={handleLogout}>
+            <FaSignOutAlt className="me-2" />
+            Logout
+          </Button>
+        </div>
+
+        {/* ===== DASHBOARD CARDS ===== */}
+        <Container className="mt-4">
+          <Row className="g-4">
+            <DashboardCard
+              icon={<FaUserCircle />}
+              title="Profile"
+              desc="View your personal details."
+              link="/UserProfileCard"
+            />
+
+            <DashboardCard
+              icon={<FaBoxOpen />}
+              title="View Products"
+              desc="Browse construction materials."
+              link="/userviewprdt"
+            />
+
+            <DashboardCard
+              icon={<FaClipboardList />}
+              title="Requested Products"
+              desc="Track material requests."
+              link="/userreqprdct"
+            />
+
+            <DashboardCard
+              icon={<FaHardHat />}
+              title="Hire Workers"
+              desc="Select skilled workers."
+              link="/userreqworker"
+            />
+
+            <DashboardCard
+              icon={<FaExclamationTriangle />}
+              title="Complaints"
+              desc="Report issues to admin."
+              link="/sendcomplaint"
+            />
+
+            <DashboardCard
+              icon={<FaUsers />}
+              title="Worker Responses"
+              desc="View replies & updates."
+              link="/viewwrkrs"
+            />
+
+            <DashboardCard
+              icon={<FaStar />}
+              title="Feedback & Rating"
+              desc="Rate vendors & services."
+              link="/sendfeedback"
+            />
+
+            <DashboardCard
+              icon={<FaProjectDiagram />}
+              title="Project Management"
+              desc="Manage project details."
+              link="/projectdetails"
+            />
+          </Row>
+        </Container>
       </div>
-
-      <Container className="mt-3">
-        <h2 className="text-center user-title">User Dashboard</h2>
-
-        <Row className="g-4 mt-4">
-          <Col md={4}>
-            <Card className="user-card">
-              <Card.Body className="text-center">
-                <Card.Title>View Products</Card.Title>
-                <p>Products</p>
-                <Link to="/userviewprdt" className="btn user-btn">
-                  Send Request
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={4}>
-            <Card className="user-card">
-              <Card.Body className="text-center">
-                <Card.Title>Requested Products</Card.Title>
-                <p>Send request to vendors for required materials.</p>
-                <Link to="/userreqprdct" className="btn user-btn">
-                  Send Request
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={4}>
-            <Card className="user-card">
-              <Card.Body className="text-center">
-                <Card.Title>Requested Worker</Card.Title>
-                <p>Select worker category and rating to hire easily.</p>
-                <Link to="/userreqworker" className="btn user-btn">
-                  Hire Worker
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={4}>
-            <Card className="user-card">
-              <Card.Body className="text-center">
-                <Card.Title>Complaints</Card.Title>
-                <p>Submit complaints to admin regarding issues.</p>
-                <Link to="/sendcomplaint" className="btn user-btn">
-                  Send Complaint
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={4}>
-            <Card className="user-card">
-              <Card.Body className="text-center">
-                <Card.Title>View Workers</Card.Title>
-                <p>Check responses to your complaints.</p>
-                <Link to="/viewwrkrs" className="btn user-btn">
-                  View Reply
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={4}>
-            <Card className="user-card">
-              <Card.Body className="text-center">
-                <Card.Title>Send Feedback & Rating</Card.Title>
-                <p>Give feedback to vendors about their service.</p>
-                <Link to="/sendfeedback" className="btn user-btn">
-                  Send Feedback
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={4}>
-            <Card className="user-card">
-              <Card.Body className="text-center">
-                <Card.Title>Project Details</Card.Title>
-                <p>View or add information about your construction projects.</p>
-                <Link to="/projectdetails" className="btn user-btn">
-                  Manage Projects
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
     </div>
+  );
+}
+
+function DashboardCard({ icon, title, desc, link }) {
+  return (
+    <Col md={4}>
+      <Card className="dashboard-card">
+        <Card.Body>
+          <div className="card-icon">{icon}</div>
+          <h5>{title}</h5>
+          <p>{desc}</p>
+          <Link to={link} className="dashboard-btn">
+            Open
+          </Link>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 }
 

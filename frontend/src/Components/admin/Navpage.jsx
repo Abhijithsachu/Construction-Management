@@ -1,30 +1,45 @@
-import React from 'react'
+import React from "react";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 
-import Nav from "react-bootstrap/Nav";
-import { Link } from "react-router-dom";
 function Navpage() {
+  const navigate = useNavigate();
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/"); // redirect to login/home page
+  };
+
   return (
-    <div>
-      {/* TOP NAVIGATION */}
-      <Nav justify variant="tabs" defaultActiveKey="/homepage">
-        <Nav.Item>
-          <Nav.Link as={Link} to="/homepage">Home</Nav.Link>
-        </Nav.Item>
+    <Navbar expand="lg" bg="dark" variant="dark" fixed="top">
+      <Container>
+        <Navbar.Brand> AdminPanel </Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbar-nav" />
+        <Navbar.Collapse id="navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/adminviewuser">
+              Users
+            </Nav.Link>
+            <Nav.Link as={Link} to="/adminverifyvendor">
+              Vendors
+            </Nav.Link>
+            <Nav.Link as={Link} to="/adminviewworker">
+              Workers
+            </Nav.Link>
+            <Nav.Link as={Link} to="/viewprojects">
+              Projects
+            </Nav.Link>
+          </Nav>
 
-        <Nav.Item>
-          <Nav.Link as={Link} to="/adminviewuser">User</Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link as={Link} to="/adminverifyvendor">Vendor</Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link as={Link} to="/adminviewworker">Worker</Nav.Link>
-        </Nav.Item>
-      </Nav>
-    </div>
-  )
+          {/* Logout button on the right */}
+          <Button variant="outline-light" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 }
 
-export default Navpage
+export default Navpage;

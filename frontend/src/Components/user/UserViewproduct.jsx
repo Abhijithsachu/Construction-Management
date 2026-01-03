@@ -3,7 +3,6 @@ import api from "../../api";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import Badge from "react-bootstrap/Badge";
 import { useNavigate } from "react-router-dom";
 
 function UserViewProduct() {
@@ -22,6 +21,7 @@ function UserViewProduct() {
     fetchProducts();
   }, []);
 
+  // ================= FETCH PRODUCTS =================
   const fetchProducts = async () => {
     try {
       const res = await api.get("/product/allproduct");
@@ -31,6 +31,28 @@ function UserViewProduct() {
     }
   };
 
+  // ================= STAR RENDER =================
+  const renderStars = (avgRating = 0) => {
+    const stars = [];
+    const rounded = Math.round(avgRating);
+
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <span
+          key={i}
+          style={{
+            color: i <= rounded ? "#FFD700" : "#ccc",
+            fontSize: "18px",
+          }}
+        >
+          ★
+        </span>
+      );
+    }
+    return stars;
+  };
+
+  // ================= MODAL =================
   const handleShow = (product) => {
     setSelectedProduct(product);
     setQuantity(1);
@@ -46,21 +68,21 @@ function UserViewProduct() {
   const totalPrice =
     selectedProduct ? selectedProduct.price * quantity : 0;
 
+  // ================= REQUEST QUOTE =================
   const handleSubmitRequest = async () => {
     if (!selectedProduct) return;
 
     try {
       const body = {
-        userId: userId,
+        userId,
         productId: selectedProduct._id,
-        quantity: quantity,
+        quantity,
         pricePerUnit: selectedProduct.price,
-        totalPrice: totalPrice,
-        address: address,
+        totalPrice,
+        address,
       };
 
-      let res = await api.post("/productbooking/add", body);
-      console.log(res);
+      await api.post("/productbooking/add", body);
       alert("Quote request submitted successfully ✅");
       handleClose();
     } catch (error) {
@@ -69,6 +91,7 @@ function UserViewProduct() {
     }
   };
 
+  // ================= SEARCH FILTER =================
   const filteredProducts = products.filter((item) => {
     const term = searchTerm.toLowerCase();
     return (
@@ -77,21 +100,7 @@ function UserViewProduct() {
     );
   });
 
-  // ⭐ Function to render stars
-  const renderStars = (avgRating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (i <= Math.floor(avgRating)) {
-        stars.push(<span key={i} style={{ color: "#FFD700" }}>★</span>);
-      } else if (i - avgRating < 1) {
-        stars.push(<span key={i} style={{ color: "#FFD700" }}>☆</span>);
-      } else {
-        stars.push(<span key={i} style={{ color: "#FFD700" }}>☆</span>);
-      }
-    }
-    return stars;
-  };
-
+  // ================= UI =================
   return (
     <>
       <div
@@ -99,7 +108,6 @@ function UserViewProduct() {
           backgroundImage:
             "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1503387762-592deb58ef4e')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
           minHeight: "100vh",
           paddingTop: "40px",
           position: "relative",
@@ -113,7 +121,6 @@ function UserViewProduct() {
             position: "absolute",
             top: "20px",
             left: "20px",
-            zIndex: 10,
             fontWeight: "bold",
           }}
         >
@@ -125,15 +132,17 @@ function UserViewProduct() {
             🧱 Construction Materials
           </h2>
 
+          {/* SEARCH */}
           <Form className="mb-4">
             <Form.Control
               type="text"
-              placeholder="Search by Product Name or Price..."
+              placeholder="Search by name or price..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </Form>
 
+          {/* PRODUCTS */}
           <div className="row g-4">
             {filteredProducts.length === 0 ? (
               <p className="text-center text-light">No products available</p>
@@ -143,24 +152,18 @@ function UserViewProduct() {
                   <div className="card h-100 shadow-lg border-0">
                     <img
                       src={`http://localhost:8000/${item.Photo}`}
-                      className="card-img-top"
                       alt={item.productname}
+                      className="card-img-top"
                       style={{ height: "220px", objectFit: "cover" }}
                     />
 
                     <div className="card-body d-flex flex-column">
-                      <h5 className="card-title fw-semibold">
-                        {item.productname}
-                      </h5>
+                      <h5 className="fw-semibold">{item.productname}</h5>
+                      <p className="text-muted small">{item.Description}</p>
 
-                      <p className="card-text text-muted small">
-                        {item.Description}
-                      </p>
-
-                      {/* ⭐ Average Rating */}
-                      {item.rating?.avgrating > 0 && (
+                      {/* ⭐ RATING */}
+                      {item.rating?.reviews?.length > 0 && (
                         <div className="mb-2">
-                          <strong>Rating: </strong>
                           {renderStars(item.rating.avgrating)}
                           <span className="text-muted ms-2">
                             ({item.rating.reviews.length})
@@ -177,7 +180,10 @@ function UserViewProduct() {
                         </span>
                       </div>
 
-                      <Button variant="outline-dark" className="mb-2 w-100">
+                      <Button
+                        variant="outline-dark"
+                        className="mb-2 w-100"
+                      >
                         View Details
                       </Button>
 
@@ -197,7 +203,7 @@ function UserViewProduct() {
         </div>
       </div>
 
-      {/* REQUEST QUOTE MODAL */}
+      {/* ================= MODAL ================= */}
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Request Quote</Modal.Title>
@@ -209,7 +215,6 @@ function UserViewProduct() {
               <Form.Group className="mb-3">
                 <Form.Label>Product</Form.Label>
                 <Form.Control
-                  type="text"
                   value={selectedProduct.productname}
                   disabled
                 />
@@ -226,18 +231,8 @@ function UserViewProduct() {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label>Price per Unit (₹)</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={selectedProduct.price}
-                  disabled
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
                 <Form.Label>Total Price (₹)</Form.Label>
                 <Form.Control
-                  type="text"
                   value={totalPrice}
                   disabled
                   className="fw-bold text-success"
@@ -245,11 +240,10 @@ function UserViewProduct() {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label>Alternative Address</Form.Label>
+                <Form.Label>Delivery Address</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={3}
-                  placeholder="Enter delivery address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                 />

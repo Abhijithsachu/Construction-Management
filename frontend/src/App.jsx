@@ -32,6 +32,8 @@ import UserViewProduct from './Components/user/UserViewproduct'
 import ViewProject from './Components/worker/viewproject'
 import AdminViewprojects from './Components/admin/adminViewprojects'
 import Addworker from './Components/worker/Addworker'
+import UserProfileCard from './Components/user/UserProfileCard'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -88,6 +90,8 @@ function App() {
         <Route path='/projects' element={<ViewProject/>}/>
         <Route path="/viewprojects" element={<AdminViewprojects/>}/>
         <Route path="/addworker" element={<Addworker/>}/>
+        <Route path="/UserProfileCard" element={<UserProfileCard/>}/>
+       
     </Routes>
     </>
   )

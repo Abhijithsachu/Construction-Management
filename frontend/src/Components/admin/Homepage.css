@@ -1,5 +1,87 @@
-.hover-shadow:hover {
-  transform: translateY(-5px);
+/* ===== PAGE ===== */
+.homepage {
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+  padding-top: 60px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ===== BLUEPRINT GRID ===== */
+.homepage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* ===== DIAGONAL LIGHT ===== */
+.homepage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255,193,7,0.08), transparent 60%);
+  pointer-events: none;
+}
+
+/* ===== ABSTRACT SHAPES ===== */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  filter: blur(50px);
+}
+
+.bg-shape.one { width: 320px; height: 320px; top: 10%; left: 10%; }
+.bg-shape.two { width: 450px; height: 450px; bottom: 10%; right: 15%; }
+.bg-shape.three { width: 220px; height: 220px; top: 60%; left: 45%; }
+
+/* ===== VIGNETTE ===== */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%);
+  pointer-events: none;
+}
+
+/* ===== CARDS ===== */
+.dashboard-card {
+  background: #2a2a2a;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
   transition: 0.3s ease;
-  box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.3);
+}
+
+/* Card title and numbers */
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffc107;
+}
+
+.card-number {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.card-label {
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+/* Card button */
+.card-btn {
+  width: 100%;
+  font-weight: 600;
 }

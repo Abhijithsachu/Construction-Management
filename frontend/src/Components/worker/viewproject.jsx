@@ -10,6 +10,8 @@ function ViewProject() {
 
   const navigate = useNavigate();
   const workerId = localStorage.getItem("workerId");
+  console.log(workerId);
+  
 
   useEffect(() => {
     fetchProjects();

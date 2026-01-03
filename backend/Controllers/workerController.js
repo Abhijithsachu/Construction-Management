@@ -124,13 +124,13 @@ export const getWorkerHome=async(req,res)=>{
     }
   }
 
-//  export const getaddedstaff=async(req,res)=>{
-//   try{
-//     const addstaff=await projectData.find().populate("staff")
-//     return res.status(200).json({addstaff});
-//   }
-//   catch(error){
-//         console.log(error)
-//         return res.status(500).json({message:"server side error"})
-//     }
-//   }
+ export const getaddedstaff=async(req,res)=>{
+   try{
+     const addstaff=await projectData.find().populate("staff")
+     return res.status(200).json({addstaff});
+   }
+   catch(error){
+         console.log(error)
+         return res.status(500).json({message:"server side error"})
+     }
+   }

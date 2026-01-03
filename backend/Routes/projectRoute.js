@@ -1,5 +1,5 @@
 import express from "express";
-import { getAcceptedProjectsForWorker, getproject, projects, updateProjectStatus, userviewproject, workerviewproject } from "../Controllers/projectController.js";
+import { getAcceptedProjectsForWorker, getproject, projects, requestWorkerForProject, updateProjectStatus, userviewproject, workerviewproject } from "../Controllers/projectController.js";
 import { viewProject } from "../Controllers/adminController.js";
 
 const projectdetail=express.Router()
@@ -10,5 +10,5 @@ projectdetail.get('/workerproject/:id',workerviewproject)
 projectdetail.put("/status/:projectId", updateProjectStatus);
 projectdetail.get("/adminviewproject",viewProject)
 projectdetail.get("/acceptedproject/:id",getAcceptedProjectsForWorker)
-
+projectdetail.post("/request", requestWorkerForProject);
 export default projectdetail

@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { Form, Button, Card, Container, Row, Col } from "react-bootstrap";
-import api from "../../api";
+import React, { useState } from 'react';
+import './Registration_wrk.css';
+import api from '../../api';
 import { useNavigate } from "react-router-dom";
 
 function Registration_wrk() {
-  const [image, setimage] = useState(null);
-  const [fullname, setfullname] = useState("");
-  const [email, setemail] = useState("");
-  const [phone, setphone] = useState("");
+  const [image, setImage] = useState(null);
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [qualification, setQualification] = useState("");
-  const [jobrole, setjobrole] = useState("Engineer");
-  const [password, setpassword] = useState("");
-  const [confirmpassword, setconfirmpassword] = useState("");
-  const navigate= useNavigate()
+  const [jobrole, setJobrole] = useState("Engineer");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const validate = () => {
     if (!image) return "Please upload a photo.";
@@ -28,7 +28,7 @@ function Registration_wrk() {
     return null;
   };
 
-  const handlesubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const error = validate();
     if (error) return alert(error);
@@ -43,124 +43,67 @@ function Registration_wrk() {
     formData.append("password", password);
 
     try {
-      const res = await api.post("/worker/wrk_register", formData, {
+      await api.post("/worker/wrk_register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
       alert("Registration Successful!");
-navigate('/')
-      setfullname("");
-      setemail("");
-      setphone("");
-      setQualification("");
-      setjobrole("Engineer");
-      setpassword("");
-      setconfirmpassword("");
-      setimage(null);
+      navigate('/');
+      setFullname(""); setEmail(""); setPhone(""); setQualification("");
+      setJobrole("Engineer"); setPassword(""); setConfirmPassword(""); setImage(null);
     } catch (err) {
       alert(err.response?.data?.message || "Something went wrong");
     }
   };
 
   return (
-    <Container className="mt-5">
-      <Row className="justify-content-center">
-        <Col md={6}>
-          <Card className="shadow-lg p-4">
-            <h2 className="text-center mb-4">Worker Registration</h2>
-
-            <Form onSubmit={handlesubmit}>
-              {/* Image Upload */}
-              <Form.Group className="mb-3">
-                <Form.Label>Photo</Form.Label>
-                <Form.Control 
-                  type="file"
-                  onChange={(e) => setimage(e.target.files[0])}
-                />
-              </Form.Group>
-
-              {/* Full Name */}
-              <Form.Group className="mb-3">
-                <Form.Label>Full Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={fullname}
-                  onChange={(e) => setfullname(e.target.value)}
-                />
-              </Form.Group>
-
-              {/* Email */}
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  value={email}
-                  onChange={(e) => setemail(e.target.value)}
-                />
-              </Form.Group>
-
-              {/* Phone */}
-              <Form.Group className="mb-3">
-                <Form.Label>Phone</Form.Label>
-                <Form.Control
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setphone(e.target.value)}
-                />
-              </Form.Group>
-
-              {/* Qualification */}
-              <Form.Group className="mb-3">
-                <Form.Label>Qualification</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={qualification}
-                  onChange={(e) => setQualification(e.target.value)}
-                />
-              </Form.Group>
-
-              {/* Job Role */}
-              <Form.Group className="mb-3">
-                <Form.Label>Job Role</Form.Label>
-                <Form.Select
-                  value={jobrole}
-                  onChange={(e) => setjobrole(e.target.value)}
-                >
+    <div className="registration-page">
+      <form className="registration-form" onSubmit={handleSubmit}>
+        <h1 className="form-heading">Worker Registration</h1>
+        <table>
+          <tbody>
+            <tr>
+              <td><label>Photo</label></td>
+              <td><input type="file" onChange={(e) => setImage(e.target.files[0])} /></td>
+            </tr>
+            <tr>
+              <td><label>Full Name</label></td>
+              <td><input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} /></td>
+            </tr>
+            <tr>
+              <td><label>Email</label></td>
+              <td><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></td>
+            </tr>
+            <tr>
+              <td><label>Phone</label></td>
+              <td><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} /></td>
+            </tr>
+            <tr>
+              <td><label>Qualification</label></td>
+              <td><input type="text" value={qualification} onChange={(e) => setQualification(e.target.value)} /></td>
+            </tr>
+            <tr>
+              <td><label>Job Role</label></td>
+              <td>
+                <select value={jobrole} onChange={(e) => setJobrole(e.target.value)}>
                   <option value="Engineer">Engineer</option>
                   <option value="Plumber">Plumber</option>
                   <option value="Carpenter">Carpenter</option>
-                </Form.Select>
-              </Form.Group>
-
-              {/* Password */}
-              <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={password}
-                  onChange={(e) => setpassword(e.target.value)}
-                />
-              </Form.Group>
-
-              {/* Confirm Password */}
-              <Form.Group className="mb-3">
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={confirmpassword}
-                  onChange={(e) => setconfirmpassword(e.target.value)}
-                />
-              </Form.Group>
-
-              <Button variant="primary" type="submit" className="w-100">
-                Register
-              </Button>
-            </Form>
-
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><label>Password</label></td>
+              <td><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} /></td>
+            </tr>
+            <tr>
+              <td><label>Confirm Password</label></td>
+              <td><input type="password" value={confirmpassword} onChange={(e) => setConfirmPassword(e.target.value)} /></td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="submit" className="submit-btn">Register</button>
+      </form>
+    </div>
   );
 }
 

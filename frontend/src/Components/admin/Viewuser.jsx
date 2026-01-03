@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import Table from "react-bootstrap/Table";
+import { Button, Container, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Navpage from "./Navpage";
 import api from "../../api";
@@ -8,11 +7,9 @@ import api from "../../api";
 function Viewuser() {
   const [users, setUsers] = useState([]);
 
-  // Fetch users
   const fetchDetails = async () => {
     try {
       const res = await api.get("/user/viewUser");
-      console.log(res, "USER DATA");
       setUsers(res.data.user);
     } catch (error) {
       console.error(error);
@@ -24,32 +21,25 @@ function Viewuser() {
   }, []);
 
   return (
-    <div>
+    <div className="viewuser-page bg-dark min-vh-100 text-white">
       <Navpage />
 
-      {/* HEADER */}
-      <div className="d-flex justify-content-between align-items-center mb-3 px-3">
-        <Link to="/homepage">
-          <Button variant="secondary">⬅ Back</Button>
-        </Link>
+      <Container className="mt-5 pt-5">
+        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+          <Link to="/homepage">
+            <Button variant="secondary">⬅ Back</Button>
+          </Link>
+          <h3 className="fw-bold text-center w-100 mb-0">USER INFO</h3>
+          <div></div>
+        </div>
 
-        <h3 className="fw-bold mb-0">USER INFO</h3>
-
-        <Link to="/workerregistration">
-          <Button variant="primary">+ ADD</Button>
-        </Link>
-      </div>
-
-      {/* USER TABLE */}
-      <div className="px-3">
-        <Table striped bordered hover responsive>
-          <thead className="table-dark">
+        <Table striped bordered hover responsive className="table-dark align-middle">
+          <thead>
             <tr>
               <th>#</th>
               <th>Full Name</th>
-              <th>Username</th>
+              <th>Email / Username</th>
               <th>Phone No</th>
-
             </tr>
           </thead>
 
@@ -61,19 +51,18 @@ function Viewuser() {
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phoneNo}</td>
-
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="text-center">
+                <td colSpan="4" className="text-center text-warning">
                   No users found
                 </td>
               </tr>
             )}
           </tbody>
         </Table>
-      </div>
+      </Container>
     </div>
   );
 }

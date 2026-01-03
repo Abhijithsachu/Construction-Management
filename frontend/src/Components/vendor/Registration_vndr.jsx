@@ -1,34 +1,33 @@
-import React, { useState } from 'react'
-import './Registration_vndr.css'
-import api from '../../api'
+import React, { useState } from 'react';
+import './Registration_vndr.css';
+import api from '../../api';
 import { useNavigate } from "react-router-dom";
 
 function Registration_vndr() {
-  const [CompanyName,setCompanyName]=useState()
-  const [email,setemail]=useState()
-  const [phoneNo,setphoneNo]=useState()
-  const [Location,setLocation]=useState()
-  const [CompanyLogo,setCompanyLogo]=useState()
-  const [password,setpassword]=useState()
-  const [confirmpassword,setconfirmpassword]=useState()
-  const navigate= useNavigate()
+  const [CompanyName, setCompanyName] = useState();
+  const [email, setEmail] = useState();
+  const [phoneNo, setPhoneNo] = useState();
+  const [Location, setLocation] = useState();
+  const [CompanyLogo, setCompanyLogo] = useState();
+  const [password, setPassword] = useState();
+  const [confirmpassword, setConfirmPassword] = useState();
+  const navigate = useNavigate();
 
   const validate = () => {
     if (!CompanyLogo) return "Please upload a photo.";
-    if (!CompanyName.trim()) return "Full name is required.";
-    if (!email.trim()) return "Email is required.";
+    if (!CompanyName?.trim()) return "Company name is required.";
+    if (!email?.trim()) return "Email is required.";
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Invalid email.";
-    if (!phoneNo.trim()) return "Phone is required.";
+    if (!phoneNo?.trim()) return "Phone is required.";
     if (!/^[0-9]{10}$/.test(phoneNo)) return "Phone must be 10 digits.";
-    if (!Location) return "Add your location"
+    if (!Location?.trim()) return "Add your location";
     if (!password) return "Password is required.";
     if (password.length < 6) return "Password too short.";
     if (password !== confirmpassword) return "Passwords do not match.";
     return null;
   };
 
-  const handlesubmit=async(e)=>{
-      
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const error = validate();
     if (error) return alert(error);
@@ -40,72 +39,55 @@ function Registration_vndr() {
     formData.append("phoneNo", phoneNo);
     formData.append("Location", Location);
     formData.append("password", password);
-    
+
     try {
       const res = await api.post("/vendor/vndr_register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
       alert("Registration Successful!");
-navigate('/')
-      setCompanyName("");
-      setemail("");
-      setphoneNo("");
-      setLocation("");
-      setpassword("");
-      setconfirmpassword("");
-      setCompanyLogo(null);
+      navigate('/');
+      setCompanyName(""); setEmail(""); setPhoneNo(""); setLocation("");
+      setPassword(""); setConfirmpassword(""); setCompanyLogo(null);
     } catch (err) {
       alert(err.response?.data?.message || "Something went wrong");
     }
-    
-  }
+  };
+
   return (
-    <div className='vndrpage'>
-      <form className="vndrform"  onSubmit={handlesubmit}>
-        <h1 className='vndrheading'>Registration</h1>
+    <div className='registration-page'>
+      <div className="bg-shape one"></div>
+      <div className="bg-shape two"></div>
+      <div className="bg-shape three"></div>
+      <div className="vignette"></div>
 
-        <table>
-          <tr>
-            <td><label className="CompanyName">Company Name</label></td>
-            <td><input type="text" onChange={(e)=>{setCompanyName(e.target.value)}} /></td>
-          </tr>
+      <form className="vndrform" onSubmit={handleSubmit}>
+        <h1 className='vndrheading'>Vendor Registration</h1>
 
-          <tr>
-            <td><label className="Email">Email</label></td>
-            <td><input type="email" onChange={(e)=>{setemail(e.target.value)}}/></td>
-          </tr>
+        <label>Company Name</label>
+        <input type="text" onChange={(e)=>setCompanyName(e.target.value)} />
 
-          <tr>
-            <td><label className="phoneNo">Phone No</label></td>
-            <td><input type="tel" onChange={(e)=>{setphoneNo(e.target.value)}}/></td>
-          </tr>
+        <label>Email</label>
+        <input type="email" onChange={(e)=>setEmail(e.target.value)} />
 
-          <tr>
-            <td><label className="Location">Location</label></td>
-            <td><input type="text" onChange={(e)=>{setLocation(e.target.value)}}/></td>
-          </tr>
+        <label>Phone No</label>
+        <input type="tel" onChange={(e)=>setPhoneNo(e.target.value)} />
 
-          <tr>
-            <td><label className="CompanyLogo">Company Logo</label></td>
-            <td><input type="file" onChange={(e)=>{setCompanyLogo(e.target.files[0])}}/></td>
-          </tr>
+        <label>Location</label>
+        <input type="text" onChange={(e)=>setLocation(e.target.value)} />
 
-          <tr>
-            <td><label className="password">Password</label></td>
-            <td><input type="password" onChange={(e)=>{setpassword(e.target.value)}}/></td>
-          </tr>
+        <label>Company Logo</label>
+        <input type="file" onChange={(e)=>setCompanyLogo(e.target.files[0])} />
 
-          <tr>
-            <td><label className="confirmpassword">Confirm Password</label></td>
-            <td><input type="password" onChange={(e)=>{setconfirmpassword(e.target.value)}}/></td>
-          </tr>
-        </table>
+        <label>Password</label>
+        <input type="password" onChange={(e)=>setPassword(e.target.value)} />
+
+        <label>Confirm Password</label>
+        <input type="password" onChange={(e)=>setConfirmpassword(e.target.value)} />
 
         <button className="submitBtn">Register</button>
       </form>
     </div>
-  )
+  );
 }
 
-export default Registration_vndr
+export default Registration_vndr;

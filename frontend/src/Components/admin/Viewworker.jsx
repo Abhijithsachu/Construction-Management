@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Badge } from "react-bootstrap";
-import Table from "react-bootstrap/Table";
+import { Button, Badge, Container, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Navpage from "./Navpage";
 import api from "../../api";
@@ -11,8 +10,6 @@ function Viewworker() {
   const fetchDetails = async () => {
     try {
       const res = await api.get("/worker/all");
-      console.log(res);
-      
       setWorkers(res.data.workerDetails);
     } catch (error) {
       console.log(error);
@@ -23,105 +20,77 @@ function Viewworker() {
     fetchDetails();
   }, []);
 
-  // ✅ ACCEPT WORKER
   const handleAccept = async (loginId) => {
-    console.log(loginId);
-    
-    try {
-     let response= await api.put(`/worker/updatestatus/${loginId}`, { verify: true });
-     console.log(response);
-     
-      fetchDetails();
-    } catch (error) {
-      console.log(error);
-    }
+    await api.put(`/worker/updatestatus/${loginId}`, { verify: true });
+    fetchDetails();
   };
 
-  // ❌ REJECT WORKER
   const handleReject = async (loginId) => {
-    try {
-      await api.put(`/worker/updatestatus/${loginId}`, { verify: false });
-      fetchDetails();
-    } catch (error) {
-      console.log(error);
-    }
+    await api.put(`/worker/updatestatus/${loginId}`, { verify: false });
+    fetchDetails();
   };
 
   return (
-    <div>
+    <div className="viewworker-page bg-dark min-vh-100 text-white">
       <Navpage />
 
-      {/* 🔙 HEADER */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <Link to="/homepage">
-          <Button variant="secondary">⬅ Back</Button>
-        </Link>
+      <Container className="mt-5 pt-5">
+        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+          <Link to="/homepage">
+            <Button variant="secondary">⬅ Back</Button>
+          </Link>
+          <h3 className="fw-bold text-center w-100 mb-0">WORKER INFO</h3>
+          <div></div>
+        </div>
 
-        <h3 className="fw-bold">WORKER INFO</h3>
+        <Table striped bordered hover responsive className="table-dark align-middle">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Job Role</th>
+              <th>Email</th>
+              <th>Phone No</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-        <Link to="/workerregistration">
-          <Button variant="primary">+ ADD</Button>
-        </Link>
-      </div>
+          <tbody>
+            {workers.length > 0 ? (
+              workers.map((worker, index) => {
+                const verified = worker.commonkey?.verify;
 
-      {/* 📋 TABLE */}
-      <Table striped bordered hover responsive>
-        <thead className="table-dark">
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Job Role</th>
-            <th>Email</th>
-            <th>Phone No</th>
-            <th>Status</th>
-            <th>Action</th>
-      
-          </tr>
-        </thead>
-
-        <tbody>
-          {workers.length > 0 ? (
-            workers.map((worker, index) => {
-              const verified = worker.commonkey?.verify;
-
-              return (
-                <tr key={worker._id}>
-                  <td>{index + 1}</td>
-                  <td>{worker.name}</td>
-                  <td>{worker.jobrole}</td>
-                  <td>{worker.email}</td>
-                  <td>{worker.phoneNo}</td>
-                 
-
-                
-
-                  {/* STATUS */}
-                  <td>
-                    <Badge
-                      bg={
-                        verified === true
-                          ? "success"
+                return (
+                  <tr key={worker._id}>
+                    <td>{index + 1}</td>
+                    <td>{worker.name}</td>
+                    <td>{worker.jobrole}</td>
+                    <td>{worker.email}</td>
+                    <td>{worker.phoneNo}</td>
+                    <td>
+                      <Badge
+                        bg={
+                          verified === true
+                            ? "success"
+                            : verified === false
+                            ? "danger"
+                            : "warning"
+                        }
+                        className={verified === null ? "text-dark" : ""}
+                      >
+                        {verified === true
+                          ? "Approved"
                           : verified === false
-                          ? "danger"
-                          : "warning"
-                      }
-                    >
-                      {verified === true
-                        ? "Approved"
-                        : verified === false
-                        ? "Rejected"
-                        : "Pending"}
-                    </Badge>
-                  </td>
-
-                  {/* ACTION BUTTONS */}
-                  <td>
-                   
-                      <>
+                          ? "Rejected"
+                          : "Pending"}
+                      </Badge>
+                    </td>
+                    <td>
+                      <div className="d-flex flex-wrap gap-2">
                         <Button
                           variant="success"
                           size="sm"
-                          className="me-2"
                           onClick={() => handleAccept(worker.commonkey._id)}
                         >
                           Accept
@@ -133,21 +102,21 @@ function Viewworker() {
                         >
                           Reject
                         </Button>
-                      </>
-                   
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td colSpan="7" className="text-center text-muted">
-                No workers found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="7" className="text-center text-warning">
+                  No workers found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </Container>
     </div>
   );
 }

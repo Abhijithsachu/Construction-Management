@@ -34,7 +34,7 @@ export const userregistration=async(req,res)=>{
 
 export const getUserHome=async(req,res)=>{
     const {id}=req.params
-    console.log(id);
+    console.log("11111111111111111111111111111111111111111111111111111111111",id);
     try{
         const user=await UserData.findOne({commonkey:id})
         if(!user){

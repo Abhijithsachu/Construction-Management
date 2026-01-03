@@ -1,99 +1,91 @@
-/* ===== FULL PAGE CONSTRUCTION BACKGROUND ===== */
-body {
+/* Page background - black theme */
+.registration-page {
   min-height: 100vh;
-  margin: 0;
-  background:
-    linear-gradient(
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.6)
-    ),
-    url("C:\Users\Ishfaq AHMAD\Desktop\PROJECT\img\construction-bg.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0d0d0d; /* dark black background */
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
 }
 
-/* ===== FORM CARD ===== */
-.card {
-  background: #ffffff;
-  border-radius: 16px;
-  border: none;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+/* Form container */
+.registration-form {
+  background: #1f1f1f; /* slightly lighter black for contrast */
+  width: 480px;
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+  animation: fadeIn 0.8s ease;
 }
 
-/* ===== TITLE ===== */
-.card h2 {
-  font-weight: 700;
-  color: #212529;
+/* Heading */
+.form-heading {
   text-align: center;
-  position: relative;
-}
-
-/* Yellow underline (construction feel) */
-.card h2::after {
-  content: "";
-  display: block;
-  width: 90px;
-  height: 4px;
-  background: #f9a825;
-  margin: 10px auto 0;
-  border-radius: 3px;
-}
-
-/* ===== LABELS ===== */
-.form-label {
+  font-size: 28px;
   font-weight: 600;
-  color: #212529;
+  color: #ffc107; /* yellow for contrast on black */
+  margin-bottom: 25px;
 }
 
+/* Table layout */
+.registration-form table {
+  width: 100%;
+}
 
-.form-control,
-.form-select {
-  background-color: #ffffff !important;
-  color: #212529 !important;
-  border-radius: 8px;
+.registration-form td {
+  padding: 10px 0;
+}
+
+/* Labels */
+.registration-form label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #ddd; /* light gray */
+}
+
+/* Inputs and select */
+.registration-form input,
+.registration-form select {
+  width: 100%;
   padding: 10px;
-  border: 1px solid #ced4da;
+  border-radius: 8px;
+  border: 1px solid #444;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s ease;
+  background-color: #2a2a2a;
+  color: #fff;
 }
 
-.form-control::placeholder {
-  color: #6c757d;
+.registration-form input:focus,
+.registration-form select:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 6px rgba(255,193,7,0.5);
 }
 
-/* Focus state */
-.form-control:focus,
-.form-select:focus {
-  border-color: #f9a825;
-  box-shadow: 0 0 0 0.2rem rgba(249, 168, 37, 0.3);
-}
-
-/* File input */
-input[type="file"] {
-  background-color: #ffffff;
-  color: #212529;
-}
-
-/* ===== BUTTON ===== */
-button.btn-primary {
-  background-color: #212529;
-  border: none;
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  margin-top: 20px;
   padding: 12px;
+  font-size: 16px;
   font-weight: 600;
-  border-radius: 10px;
+  background: #ffc107; /* yellow button for contrast */
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
   transition: 0.3s ease;
 }
 
-button.btn-primary:hover {
-  background-color: #f9a825;
-  color: #212529;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+.submit-btn:hover {
+  background: #e0ac05;
+  transform: scale(1.03);
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 576px) {
-  .card {
-    padding: 20px !important;
-  }
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

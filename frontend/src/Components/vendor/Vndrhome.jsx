@@ -1,14 +1,24 @@
 import React, { useEffect } from 'react'
 import { Card, Row, Col, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  FaBoxOpen,
+  FaClipboardList,
+  FaHardHat,
+  FaTools,
+  FaExclamationTriangle,
+  FaUsers,
+  FaStar,
+  FaProjectDiagram,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import './Vndrhome.css'
 import api from '../../api';
 
 function Vndrhome() {
-  const LoginId = localStorage.getItem("LoginId");
+  const LoginId = localStorage.getItem("VLoginId");
   const navigate = useNavigate();
 
-  // Fetch shop id
   const getShop = async () => {
     try {
       const res = await api.get(`/vendor/details/${LoginId}`);
@@ -22,95 +32,89 @@ function Vndrhome() {
     getShop();
   }, []);
 
-  // ✅ LOGOUT FUNCTION
   const handleLogout = () => {
     localStorage.clear();
     navigate("/");
   };
 
   return (
-    <div className="vendor-home-page">
+    <div className="vendor-dashboard">
+      {/* Background Shapes & Vignette */}
+      <div className="bg-shape one"></div>
+      <div className="bg-shape two"></div>
+      <div className="bg-shape three"></div>
+      <div className="vignette"></div>
 
-      {/* 🔴 LOGOUT BUTTON */}
-      <div className="d-flex justify-content-end p-3">
-        <Button variant="danger" onClick={handleLogout}>
-          Logout
-        </Button>
+      <div className="page-wrapper">
+        {/* ===== HEADER ===== */}
+        <div className="dashboard-header">
+          <h2>
+            <FaHardHat className="me-2 text-warning" />
+            Vendor Dashboard
+          </h2>
+          <Button className="logout-btn" onClick={handleLogout}>
+            <FaSignOutAlt className="me-2" />
+            Logout
+          </Button>
+        </div>
+
+        <Container className="mt-4">
+          <Row className="g-4">
+            <DashboardCard
+              icon={<FaBoxOpen />}
+              title="Add Products"
+              desc="Add new construction materials or tools to your catalog."
+              link="/addprdpage"
+            />
+
+            <DashboardCard
+              icon={<FaClipboardList />}
+              title="Manage Products"
+              desc="Check or update your product catalog."
+              link="/viewprdt"
+            />
+
+            <DashboardCard
+              icon={<FaTools />}
+              title="Update Status"
+              desc="Update the status of your products."
+              link="/VendorUpdateStatus"
+            />
+
+            <DashboardCard
+              icon={<FaClipboardList />}
+              title="View Requests"
+              desc="Check material requests from users or admin."
+              link="/viewrequests"
+            />
+
+            <DashboardCard
+              icon={<FaStar />}
+              title="View Feedback"
+              desc="See feedback given by users for your services."
+              link="/VendorViewFeedback"
+            />
+          </Row>
+        </Container>
       </div>
-
-      <Container className="mt-3">
-        <h2 className="text-center vendor-title">Vendor Dashboard</h2>
-
-        <Row className="g-4 mt-4">
-
-          {/* Add Products */}
-          <Col md={4}>
-            <Card className="vendor-card">
-              <Card.Body className="text-center">
-                <Card.Title>Add Products</Card.Title>
-                <p>Add new construction materials or tools to your catalog.</p>
-                <Link to="/addprdpage" className="btn vendor-btn">
-                  Add Product
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* Manage Product */}
-          <Col md={4}>
-            <Card className="vendor-card">
-              <Card.Body className="text-center">
-                <Card.Title>Manage Product</Card.Title>
-                <p>Product details</p>
-                <Link to="/viewprdt" className="btn vendor-btn">
-                  View
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* Update Status */}
-          <Col md={4}>
-            <Card className="vendor-card">
-              <Card.Body className="text-center">
-                <Card.Title>Update Status</Card.Title>
-                <p>Product Status Update</p>
-                <Link to="/VendorUpdateStatus" className="btn vendor-btn">
-                  View
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* View Requests */}
-          <Col md={4}>
-            <Card className="vendor-card">
-              <Card.Body className="text-center">
-                <Card.Title>View Requests</Card.Title>
-                <p>Check material requests from users or admin.</p>
-                <Link to="/viewrequests" className="btn vendor-btn">
-                  View Requests
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* View Feedback */}
-          <Col md={4}>
-            <Card className="vendor-card">
-              <Card.Body className="text-center">
-                <Card.Title>View Feedback</Card.Title>
-                <p>See feedback given by users for your services.</p>
-                <Link to="/VendorViewFeedback" className="btn vendor-btn">
-                  View Feedback
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-
-        </Row>
-      </Container>
     </div>
+  );
+}
+
+function DashboardCard({ icon, title, desc, link }) {
+  return (
+    <Col md={4}>
+      <Card className="dashboard-card">
+        <Card.Body className="text-center">
+          <div className="card-icon">{icon}</div>
+          <h5>{title}</h5>
+          <p>{desc}</p>
+          <Link to={link} className="dashboard-btn">
+            Open
+          </Link>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 }
 

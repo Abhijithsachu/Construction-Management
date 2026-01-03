@@ -1,49 +1,199 @@
-/* Full background */
-.login-bg {
+/* ===== PAGE ===== */
+.login-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #579ae2, #bacfbb);
+  position: relative;
+  background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
   display: flex;
   justify-content: center;
   align-items: center;
   padding-top: 80px;
+  overflow: hidden;
 }
 
-/* Glassmorphism card */
-.login-glass {
-  width: 380px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  color: white;
+/* ===== BLUEPRINT GRID ===== */
+.login-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
 }
 
-/* Inputs */
-.form-control {
-  background: transparent !important;
-  color: white !important;
-  border-left: none;
+/* ===== DIAGONAL LIGHT ===== */
+.login-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 193, 7, 0.08),
+    transparent 60%
+  );
+  pointer-events: none;
 }
 
-.form-control::placeholder {
-  color: #ddd;
+/* ===== ABSTRACT SHAPES ===== */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  filter: blur(50px);
 }
 
-.input-group-text {
-  border-right: none;
+.bg-shape.one {
+  width: 320px;
+  height: 320px;
+  top: 15%;
+  left: 10%;
 }
 
-/* Login button */
-.login-btn {
-  background: linear-gradient(90deg, #ff512f, #dd2476);
-  border: none;
-  padding: 10px;
+.bg-shape.two {
+  width: 450px;
+  height: 450px;
+  bottom: 10%;
+  right: 15%;
+}
+
+.bg-shape.three {
+  width: 220px;
+  height: 220px;
+  top: 60%;
+  left: 45%;
+}
+
+/* ===== VIGNETTE ===== */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  pointer-events: none;
+}
+
+/* ===== WRAPPER ===== */
+.login-wrapper {
+  display: flex;
+  width: 900px;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== LEFT INFO ===== */
+.login-info {
+  flex: 1;
+  background: linear-gradient(180deg, #2b2b2b, #1f1f1f);
+  color: #ffffff;
+  padding: 50px;
+}
+
+.login-info h2 {
   font-weight: 600;
-  border-radius: 30px;
-  transition: all 0.3s ease;
+  margin-bottom: 20px;
 }
 
-.login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+.login-info p {
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.login-info ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 30px;
+}
+
+.login-info li {
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+}
+
+/* ===== RIGHT LOGIN CARD ===== */
+.login-card {
+  flex: 1;
+  padding: 45px;
+}
+
+.login-card h3 {
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #6c757d;
+  margin-bottom: 30px;
+}
+
+/* ===== INPUTS ===== */
+.input-icon {
+  background: #f1f3f5;
+  border-right: 0;
+}
+
+.form-control {
+  border-left: 0;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #ffc107;
+}
+
+/* ===== PASSWORD TOGGLE ===== */
+.password-toggle {
+  cursor: pointer;
+  background: #f1f3f5;
+}
+
+/* ===== BUTTON ===== */
+.login-btn-premium {
+  background: #ffc107;
+  border: none;
+  color: #000;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 6px;
+  transition: background 0.25s ease;
+}
+
+.login-btn-premium:hover {
+  background: #e0ac05;
+}
+
+/* ===== FOOTER ===== */
+.login-footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* ===== NAVBAR ===== */
+.navbar-premium {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.brand-text {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .login-wrapper {
+    flex-direction: column;
+    width: 95%;
+  }
+
+  .login-info {
+    display: none;
+  }
 }

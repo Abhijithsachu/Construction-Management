@@ -33,16 +33,21 @@ export const addprdts = async (req,res) => {
 }
 
 
-// Get products by vendor
-export const getProductByShop= async(req,res)=>{
-    try{
-    let shopId= req.params.VenderId
-    const product= await productData.find({Vendorid:shopId})
-    res.status(200).json(product);
+/// Get products by vendor
+export const getProductByShop = async (req, res) => {
+  try {
+    const shopId = req.params.VenderId;
+
+    const products = await productData
+      .find({ Vendorid: shopId })
+      .populate("rating.reviews.userId");
+
+    res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
+
 
 export const getproductById=async(req,res)=> {
     console.log('hittt');

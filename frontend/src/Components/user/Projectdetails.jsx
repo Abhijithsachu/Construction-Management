@@ -12,15 +12,12 @@ function Projectdetails() {
 
   /* ---------------- STATES ---------------- */
   const [projects, setProjects] = useState([]);
-  const [workers, setWorkers] = useState([]);
 
   // form states
   const [projectName, setProjectName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [selectedWorker, setSelectedWorker] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -38,20 +35,8 @@ function Projectdetails() {
     }
   };
 
-  /* ---------------- FETCH VERIFIED WORKERS ---------------- */
-  const fetchAcceptedWorkers = async () => {
-    try {
-      const res = await api.get("/worker/verifiedworker");
-      setWorkers(res.data);
-      console.log("Verified workers:", res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     fetchProjects();
-    fetchAcceptedWorkers();
   }, []);
 
   /* ---------------- ADD PROJECT ---------------- */
@@ -63,8 +48,6 @@ function Projectdetails() {
         location,
         description,
         startDate,
-        endDate,
-        workers: selectedWorker,
         userId,
       });
       console.log(re);
@@ -77,8 +60,6 @@ function Projectdetails() {
       setLocation("");
       setDescription("");
       setStartDate("");
-      setEndDate("");
-      setSelectedWorker("");
     } catch (err) {
       console.error(err);
       alert("Failed to add project");
@@ -162,30 +143,6 @@ function Projectdetails() {
                     required
                   />
                 </div>
-
-                <div className="col-md-6 mb-3">
-                  <Form.Control
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    required
-                  />
-                </div>
-
-                {/* -------- WORKER DROPDOWN -------- */}
-                <div className="col-md-12 mb-3">
-                  <Form.Select
-                    value={selectedWorker}
-                    onChange={(e) => setSelectedWorker(e.target.value)}
-                  >
-                    <option value="">Select Verified Worker</option>
-                    {workers.map((worker) => (
-                      <option key={worker._id} value={worker._id}>
-                        {worker.name} – {worker.jobrole}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </div>
               </div>
 
               <Button type="submit" variant="success">
@@ -218,9 +175,7 @@ function Projectdetails() {
 
                     <p className="text-muted mt-2">{project.description}</p>
 
-                    <small>
-                      Start: {project.startDate} | End: {project.endDate}
-                    </small>
+                    <small>Start: {project.startDate}</small>
 
                     <div className="mt-3">
                       <ProgressBar

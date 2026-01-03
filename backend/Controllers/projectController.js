@@ -5,12 +5,11 @@ import WORKER from "../Models/Worker.js";
 export const projects=async (req,res)=>{
     // const{}
     console.log(req.body);
-    const{userId,projectName,workers,location,description,startDate}=req.body
+    const{userId,projectName,location,description,startDate}=req.body
     try{
         const projectdetails= new projectData({
             userid:userId,
             projectname:projectName,
-            workerID:workers,
             location,
             description,
             date:startDate
@@ -57,6 +56,8 @@ export const userviewproject=async(req,res)=>{
 export const workerviewproject=async(req,res)=>{
     const{id}=req.params
     console.log(id);
+    console.log('hhhiiiiiiiiiiiiiiiiiiiiy');
+    
     
     try{
         const worker = await WORKER.findById(id);
@@ -122,6 +123,8 @@ console.log(id);
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
 export const addstaff = async (req, res) => {
   try {
     const { projectId, workers } = req.body; // workers = staff list
@@ -169,3 +172,39 @@ export const addstaff = async (req, res) => {
 
 
 
+
+export const requestWorkerForProject = async (req, res) => {
+  const { workerId, projectId } = req.body;
+
+  if (!workerId || !projectId) {
+    return res.status(400).json({ message: "Worker ID and Project ID required" });
+  }
+
+  try {
+    const worker = await WORKER.findById(workerId);
+    if (!worker) {
+      return res.status(404).json({ message: "Worker not found" });
+    }
+
+    const project = await projectData.findById(projectId);
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    // Optional: Prevent duplicate requests
+    const alreadyRequested = project.workerID?.includes(workerId);
+    if (alreadyRequested) {
+      return res.status(400).json({ message: "Worker already requested for this project" });
+    }
+
+    // Assign the worker to the project as "pending"
+    project.workerID = workerId;
+    project.status = "pending"; // User requested, worker hasn't accepted yet
+    await project.save();
+
+    return res.status(200).json({ message: "Worker requested successfully", project });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
