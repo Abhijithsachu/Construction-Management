@@ -1,20 +1,49 @@
 import mongoose, { Schema } from "mongoose";
 
-const complaintSchema=new Schema({
-    
-    userid:{
-        type:Schema.Types.ObjectId,
-        ref:"User",
+const complaintSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    textbox:{
-        type:String,
-        required:true,
+    productId: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
+    workerId:{
+        type: Schema.Types.ObjectId,
+        ref: "Worker",
+    },
+    issueTitle: {
+      type: String,
+     
+      trim: true,
+    },
+    issueDescription: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    issueType: {
+      type: String,
+      enum: ["Quality", "Delivery", "Payment", "Other"],
+      default: "Other",
+    },
+
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    resolvedAt: {
+      type: Date,
     },
     reply:{
         type:String,
-        required:true,
-    },
-    
-})
-const complaintData=mongoose.model("complaint",complaintSchema)
-export default complaintData
+     
+    }
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Complaint", complaintSchema);

@@ -67,7 +67,7 @@ const [worker,setworker]= useState('')
           {[
             { title: "View All Projects", link: "/projects" },
             { title: "Request Worker", link: "/addworker" },
-            { title: "View Feedback", link: "/feedback" }
+            { title: "View Complaint", link: "/viewwrkercomplaint" }
           ].map((action, index) => (
             <Col md={4} key={index}>
               <Link to={action.link} className="no-link-style">

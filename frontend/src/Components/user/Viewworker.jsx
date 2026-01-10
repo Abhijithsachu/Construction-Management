@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
 import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 
 function Viewworkers() {
   const [workers, setWorkers] = useState([]);
+  const [show, setShow] = useState(false);
+  const [selectedWorker, setSelectedWorker] = useState(null);
+  const [complaintText, setComplaintText] = useState("");
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     fetchAcceptedWorkers();
@@ -13,15 +19,46 @@ function Viewworkers() {
 
   const fetchAcceptedWorkers = async () => {
     try {
-      const res = await api.get("/worker/verifiedworker"); // accepted workers API
+      const res = await api.get("/worker/verifiedworker");
       setWorkers(res.data);
-      console.log(res,"hhhh");
-      
-      
     } catch (error) {
       console.error(error);
     }
   };
+
+  const openComplaintModal = (worker) => {
+    setSelectedWorker(worker);
+    setShow(true);
+  };
+
+  const closeModal = () => {
+    setShow(false);
+    setComplaintText("");
+    setSelectedWorker(null);
+  };
+
+  const submitComplaint = async () => {
+  if (!complaintText.trim()) {
+    alert("Please enter complaint details");
+    return;
+  }
+
+  try {
+    await api.post(`/complaint/worker/${selectedWorker._id}`,
+      {
+        userId,
+        issueDescription: complaintText,
+      }
+    );
+
+    alert("Complaint submitted successfully");
+    closeModal();
+  } catch (error) {
+    console.error(error);
+    alert("Failed to submit complaint");
+  }
+};
+
 
   return (
     <div
@@ -32,7 +69,7 @@ function Viewworkers() {
         backgroundPosition: "center",
         minHeight: "100vh",
         paddingTop: "40px",
-        position: "relative", // Needed for absolute back button
+        position: "relative",
       }}
     >
       {/* BACK BUTTON */}
@@ -64,8 +101,6 @@ function Viewworkers() {
             workers.map((item) => (
               <div className="col-lg-4 col-md-6" key={item._id}>
                 <div className="card h-100 shadow-lg border-0">
-
-                  {/* Worker Image */}
                   <img
                     src={`http://localhost:8000/${item.photo}`}
                     className="card-img-top"
@@ -95,15 +130,16 @@ function Viewworkers() {
                       📞 {item.phoneNo}
                     </p>
 
-                    <p className="small text-muted mb-0">
+                    <p className="small text-muted mb-3">
                       ✉️ {item.email}
                     </p>
 
                     <Button
-                      variant="outline-dark"
+                      variant="outline-danger"
                       className="mt-auto w-100"
+                      onClick={() => openComplaintModal(item)}
                     >
-                      View Profile
+                      🚨 Raise Complaint
                     </Button>
                   </div>
                 </div>
@@ -112,6 +148,41 @@ function Viewworkers() {
           )}
         </div>
       </div>
+
+      {/* COMPLAINT MODAL */}
+      <Modal show={show} onHide={closeModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Raise Complaint</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p className="fw-semibold mb-2">
+            Worker: {selectedWorker?.name}
+          </p>
+
+          <Form>
+            <Form.Group>
+              <Form.Label>Complaint Details</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={4}
+                placeholder="Describe your issue clearly..."
+                value={complaintText}
+                onChange={(e) => setComplaintText(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={submitComplaint}>
+            Submit Complaint
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

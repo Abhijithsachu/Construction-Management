@@ -98,24 +98,10 @@ console.log(user);
             />
 
             <DashboardCard
-              icon={<FaExclamationTriangle />}
-              title="Complaints"
-              desc="Report issues to admin."
-              link="/sendcomplaint"
-            />
-
-            <DashboardCard
               icon={<FaUsers />}
               title="Worker Responses"
               desc="View replies & updates."
               link="/viewwrkrs"
-            />
-
-            <DashboardCard
-              icon={<FaStar />}
-              title="Feedback & Rating"
-              desc="Rate vendors & services."
-              link="/sendfeedback"
             />
 
             <DashboardCard

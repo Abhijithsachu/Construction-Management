@@ -1,0 +1,162 @@
+/* ===== PAGE ===== */
+.vndrpage {
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
+
+/* ===== BLUEPRINT GRID ===== */
+.vndrpage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* ===== ABSTRACT SHAPES ===== */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  filter: blur(55px);
+}
+.bg-shape.one { width: 320px; height: 320px; top: 10%; left: 8%; }
+.bg-shape.two { width: 420px; height: 420px; bottom: 12%; right: 12%; }
+.bg-shape.three { width: 220px; height: 220px; top: 55%; left: 45%; }
+
+/* ===== VIGNETTE ===== */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-btn {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  background: transparent;
+  color: #ffc107;
+  border: 2px solid #ffc107;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: #ffc107;
+  color: #000;
+}
+
+/* ===== FORM ===== */
+.vndrform {
+  position: relative;
+  z-index: 2;
+  background: #1f1f1f;
+  width: 420px;
+  padding: 35px 30px;
+  border-radius: 14px;
+  box-shadow: 0 25px 55px rgba(0,0,0,0.6);
+  color: #fff;
+  animation: fadeIn 0.6s ease;
+}
+
+.addprd-form textarea {
+  resize: none;
+}
+
+/* ===== HEADING ===== */
+.vndrheading {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffc107;
+  margin-bottom: 25px;
+}
+
+/* ===== LABELS ===== */
+.vndrform label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ccc;
+}
+
+/* ===== INPUTS ===== */
+.vndrform input,
+.vndrform textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+  margin-bottom: 12px;
+}
+
+.vndrform input:focus,
+.vndrform textarea:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 6px rgba(255,193,7,0.5);
+}
+
+/* ===== PREVIEW ===== */
+.preview-box {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.preview-box img {
+  max-height: 180px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* ===== BUTTON ===== */
+.submitBtn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #ffc107;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submitBtn:hover {
+  background: #e0ac05;
+  transform: scale(1.03);
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -22,6 +22,8 @@ function Vndrhome() {
   const getShop = async () => {
     try {
       const res = await api.get(`/vendor/details/${LoginId}`);
+      console.log(res);
+      
       localStorage.setItem('vendorId', res.data.shop._id);
     } catch (error) {
       console.error("Failed to fetch shop:", error);
@@ -90,9 +92,9 @@ function Vndrhome() {
 
             <DashboardCard
               icon={<FaStar />}
-              title="View Feedback"
-              desc="See feedback given by users for your services."
-              link="/VendorViewFeedback"
+              title="View Complaint"
+              desc="See complaint given by users for your services."
+              link="/VendorViewComplaint"
             />
           </Row>
         </Container>

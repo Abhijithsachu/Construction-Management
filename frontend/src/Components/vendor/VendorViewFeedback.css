@@ -1,0 +1,121 @@
+/* ===== PAGE ===== */
+.vndrpage {
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+  padding: 40px 20px;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* ===== BLUEPRINT GRID ===== */
+.vndrpage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* ===== ABSTRACT SHAPES ===== */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  filter: blur(60px);
+}
+.bg-shape.one { width: 320px; height: 320px; top: 10%; left: 8%; }
+.bg-shape.two { width: 450px; height: 450px; bottom: 10%; right: 12%; }
+.bg-shape.three { width: 220px; height: 220px; top: 55%; left: 45%; }
+
+/* ===== VIGNETTE ===== */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.5) 100%);
+  pointer-events: none;
+}
+
+/* ===== CONTAINER ===== */
+.vndr-container {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== HEADING ===== */
+.vndrheading {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffc107;
+  margin-bottom: 35px;
+}
+
+/* ===== CARD ===== */
+.vndr-card {
+  background: #1f1f1f;
+  border-radius: 14px;
+  border: 1px solid #333;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+  animation: fadeIn 0.6s ease;
+}
+
+/* ===== TABLE ===== */
+.vndr-table {
+  color: #fff;
+  border-color: #333;
+}
+
+.vndr-table thead {
+  background: #2a2a2a;
+}
+
+.vndr-table thead th {
+  color: #ffc107;
+  font-weight: 600;
+  border-color: #333;
+}
+
+.vndr-table tbody tr {
+  transition: 0.3s ease;
+}
+
+.vndr-table tbody tr:hover {
+  background: rgba(255, 193, 7, 0.08);
+  transform: scale(1.01);
+}
+
+.vndr-table td {
+  border-color: #333;
+  vertical-align: middle;
+}
+
+/* ===== COMPLAINT TEXT ===== */
+.complaint-text {
+  max-width: 260px;
+  white-space: normal;
+  font-size: 14px;
+  color: #ddd;
+}
+
+/* ===== BADGES ===== */
+.badge {
+  font-size: 13px;
+  padding: 6px 10px;
+}
+
+/* ===== FADE ANIMATION ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

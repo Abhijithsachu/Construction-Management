@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./Addprd.css";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
@@ -14,10 +15,9 @@ function Addprd() {
   const [preview, setPreview] = useState(null);
   const [shopId, setShopId] = useState("");
 
-  const LoginId = localStorage.getItem("LoginId");
+  const LoginId = localStorage.getItem("VLoginId");
   const navigate = useNavigate();
 
-  // Fetch shop id
   const getShop = async () => {
     try {
       const res = await api.get(`/vendor/details/${LoginId}`);
@@ -28,18 +28,14 @@ function Addprd() {
   };
 
   useEffect(() => {
-    if (LoginId) {
-      getShop();
-    }
+    if (LoginId) getShop();
   }, [LoginId]);
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle image change
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -47,7 +43,6 @@ function Addprd() {
     setPreview(URL.createObjectURL(file));
   };
 
-  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -57,26 +52,21 @@ function Addprd() {
     }
 
     const formData = new FormData();
-    formData.append("name", product.name);
-    formData.append("price", product.price);
-    formData.append("quantity", product.quantity);
-    formData.append("description", product.description);
-    formData.append("photo", product.photo);
+    Object.entries(product).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
     formData.append("shopId", shopId);
 
     try {
-      const res = await api.post("/product", formData, {
+      await api.post("/product", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(res);
       alert("Product added successfully!");
     } catch (err) {
-      console.log(err);
       alert(err.response?.data?.message || "Something went wrong");
       return;
     }
 
-    // Reset form
     setProduct({
       name: "",
       price: "",
@@ -88,96 +78,79 @@ function Addprd() {
   };
 
   return (
-    <div className="container mt-5 position-relative">
+    <div className="vndrpage">
+      {/* BACKGROUND */}
+      <div className="bg-shape one"></div>
+      <div className="bg-shape two"></div>
+      <div className="bg-shape three"></div>
+      <div className="vignette"></div>
+
       {/* BACK BUTTON */}
       <button
         onClick={() => navigate(-1)}
-        className="btn btn-light fw-bold"
-        style={{ position: "absolute", top: "20px", left: "20px", zIndex: 10 }}
+        className="back-btn"
       >
         ⬅ Back
       </button>
 
-      <div className="card shadow">
-        <div className="card-body">
-          <h4 className="text-center mb-4">Add Product</h4>
+      <div className="vndrform addprd-form">
+        <h3 className="vndrheading">Add Product</h3>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="form-label">Product Name</label>
-              <input
-                type="text"
-                name="name"
-                className="form-control"
-                value={product.name}
-                onChange={handleChange}
-                required
-              />
+        <form onSubmit={handleSubmit}>
+          <label>Product Name</label>
+          <input
+            type="text"
+            name="name"
+            value={product.name}
+            onChange={handleChange}
+            required
+          />
+
+          <label>Price</label>
+          <input
+            type="number"
+            name="price"
+            value={product.price}
+            onChange={handleChange}
+            required
+          />
+
+          <label>Quantity</label>
+          <input
+            type="number"
+            name="quantity"
+            value={product.quantity}
+            onChange={handleChange}
+            required
+          />
+
+          <label>Description</label>
+          <textarea
+            name="description"
+            rows="3"
+            value={product.description}
+            onChange={handleChange}
+            required
+          />
+
+          <label>Product Photo</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoChange}
+            required
+          />
+
+          {preview && (
+            <div className="preview-box">
+              <img src={preview} alt="Preview" />
             </div>
+          )}
 
-            <div className="mb-3">
-              <label className="form-label">Price</label>
-              <input
-                type="number"
-                name="price"
-                className="form-control"
-                value={product.price}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Quantity</label>
-              <input
-                type="number"
-                name="quantity"
-                className="form-control"
-                value={product.quantity}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Description</label>
-              <textarea
-                name="description"
-                className="form-control"
-                rows="3"
-                value={product.description}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Product Photo</label>
-              <input
-                type="file"
-                className="form-control"
-                accept="image/*"
-                onChange={handlePhotoChange}
-                required
-              />
-            </div>
-
-            {preview && (
-              <div className="mb-3 text-center">
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="img-fluid rounded"
-                  style={{ maxHeight: "200px" }}
-                />
-              </div>
-            )}
-
-            <button type="submit" className="btn btn-primary w-100">
-              Add Product
-            </button>
-          </form>
-        </div>
+          <button type="submit" className="submitBtn">
+            Add Product
+          </button>
+        </form>
       </div>
     </div>
   );

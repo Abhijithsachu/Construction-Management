@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./VendorUpdateStatus.css";
 import {
   Container,
   Row,
@@ -47,25 +48,35 @@ function VendorUpdateStatus() {
   }, []);
 
   return (
-    <div className="bg-light min-vh-100 py-5">
-      <Container>
-        {/* BACK BUTTON */}
-        <div className="mb-3">
-          <Button variant="light" className="fw-bold" onClick={() => navigate(-1)}>
-            ⬅ Back
-          </Button>
-        </div>
+    <div className="orderstatus-page">
+      {/* BACKGROUND EFFECTS */}
+      <div className="order-bg one"></div>
+      <div className="order-bg two"></div>
+      <div className="order-bg three"></div>
+      <div className="order-vignette"></div>
 
-        <h2 className="text-center fw-bold text-primary mb-4">
-          Update Order Status
-        </h2>
+      <Container className="order-container">
+        {/* BACK BUTTON */}
+        <button
+          className="order-back-btn"
+          onClick={() => navigate(-1)}
+        >
+          ⬅ Back
+        </button>
+
+        <h2 className="order-heading">Update Order Status</h2>
 
         <Row>
           <Col>
-            <Card className="shadow border-0">
+            <Card className="order-card">
               <Card.Body>
-                <Table bordered hover responsive className="align-middle text-center">
-                  <thead className="table-primary">
+                <Table
+                  responsive
+                  hover
+                  bordered
+                  className="order-table text-center align-middle"
+                >
+                  <thead>
                     <tr>
                       <th>#</th>
                       <th>User</th>
@@ -110,22 +121,23 @@ function VendorUpdateStatus() {
 
                           <td>
                             <Form.Select
+                              className="order-select"
                               value={statusMap[order._id] || order.status}
                               onChange={(e) =>
                                 handleStatusChange(order._id, e.target.value)
                               }
                             >
-                              <option value="Order Confirmed">Order Confirmed</option>
-                              <option value="Packed">Packed</option>
-                              <option value="Shipped">Shipped</option>
-                              <option value="Out for Delivery">Out for Delivery</option>
-                              <option value="Delivered">Delivered</option>
+                              <option>Order Confirmed</option>
+                              <option>Packed</option>
+                              <option>Shipped</option>
+                              <option>Out for Delivery</option>
+                              <option>Delivered</option>
                             </Form.Select>
                           </td>
 
                           <td>
                             <Button
-                              variant="success"
+                              className="order-update-btn"
                               size="sm"
                               onClick={() => updateStatus(order._id)}
                             >

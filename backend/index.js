@@ -9,7 +9,7 @@ import productRoute from "./Routes/productRoute.js"
 import bookingRoute from "./Routes/productbookingRoute.js"
 import projectData from "./Models/project.js"
 import projectdetail from "./Routes/projectRoute.js"
-
+import complaintRoute from "./Routes/complaintRoute.js"
 mongoose.connect("mongodb://localhost:27017/Construction").then(()=>{
     console.log("mongosedb connected successfully")
 })
@@ -31,4 +31,5 @@ app.use("/api/product",productRoute)
 app.use("/api/productbooking",bookingRoute)
 app.use("/api/viewproductbooking",bookingRoute)
 app.use("/api/project",projectdetail)
+app.use("/api/complaint",complaintRoute)
 

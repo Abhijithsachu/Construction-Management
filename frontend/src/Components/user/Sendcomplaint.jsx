@@ -12,7 +12,7 @@ function Sendcomplaint() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchComplaints();
+    fetchComplaints();a
   }, []);
 
   const fetchComplaints = async () => {

@@ -9,10 +9,20 @@ import { useNavigate } from "react-router-dom";
 function RequestPrdct() {
   const [products, setProducts] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
+
+  // Rating
   const [showRatingModal, setShowRatingModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const [rating, setRating] = useState(5);
   const [review, setReview] = useState("");
+
+  // Complaint
+  const [showComplaintModal, setShowComplaintModal] = useState(false);
+  const [complaintTitle, setComplaintTitle] = useState("");
+  const [complaintDescription, setComplaintDescription] = useState("");
+  const [complaintType, setComplaintType] = useState("Other");
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
@@ -33,18 +43,17 @@ function RequestPrdct() {
   const handleCancel = async (bookingId) => {
     try {
       await api.put(`/productbooking/cancel/${bookingId}`);
-      alert("Booking cancelled successfully ❌");
+      alert("Booking cancelled ❌");
       fetchProducts();
     } catch (error) {
-      console.error(error);
       alert("Only pending bookings can be cancelled");
     }
   };
 
-  // OPEN RATING MODAL
-  const handleOpenRating = (product) => {
-    setSelectedProduct(product);
-    setRating(5); // default rating
+  // OPEN RATING
+  const handleOpenRating = (item) => {
+    setSelectedProduct(item);
+    setRating(5);
     setReview("");
     setShowRatingModal(true);
   };
@@ -52,7 +61,6 @@ function RequestPrdct() {
   // SUBMIT RATING
   const handleSubmitRating = async () => {
     if (!selectedProduct) return;
-
     try {
       await api.post(`/product/rate/${selectedProduct.productId._id}`, {
         userId,
@@ -63,8 +71,38 @@ function RequestPrdct() {
       setShowRatingModal(false);
       fetchProducts();
     } catch (error) {
-      console.error(error);
       alert("Failed to submit rating");
+    }
+  };
+
+  // OPEN COMPLAINT
+  const handleOpenComplaint = (item) => {
+    setSelectedProduct(item);
+    setComplaintTitle("");
+    setComplaintDescription("");
+    setComplaintType("Other");
+    setShowComplaintModal(true);
+  };
+
+  // SUBMIT COMPLAINT
+  const handleSubmitComplaint = async () => {
+    if (!selectedProduct) return;
+    console.log(selectedProduct);
+    
+    try {
+   let res=   await api.post(`/complaint/${selectedProduct.productId._id}`, {
+        userId,
+        issueTitle: complaintTitle,
+        issueDescription: complaintDescription,
+        issueType: complaintType,
+      });
+      console.log(res);
+      
+      alert("Complaint submitted ⚠️");
+      setShowComplaintModal(false);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to submit complaint");
     }
   };
 
@@ -86,7 +124,6 @@ function RequestPrdct() {
     }
   };
 
-  // FILTER LOGIC
   const filteredProducts =
     filterStatus === "All"
       ? products
@@ -98,36 +135,26 @@ function RequestPrdct() {
         backgroundImage:
           "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1503387762-592deb58ef4e')",
         backgroundSize: "cover",
-        backgroundPosition: "center",
         minHeight: "100vh",
         paddingTop: "40px",
-        position: "relative",
       }}
     >
-      {/* BACK BUTTON */}
       <Button
         variant="light"
         onClick={() => navigate(-1)}
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-          zIndex: 10,
-          fontWeight: "bold",
-        }}
+        style={{ position: "absolute", top: 20, left: 20 }}
       >
         ⬅ Back
       </Button>
 
       <div className="container">
-        <h2 className="text-center fw-bold text-white mb-4">
+        <h2 className="text-center text-white fw-bold mb-4">
           📦 My Requested Products
         </h2>
 
-        {/* FILTER */}
         <div className="d-flex justify-content-end mb-4">
           <select
-            className="form-select w-auto fw-bold"
+            className="form-select w-auto"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
@@ -146,57 +173,62 @@ function RequestPrdct() {
           ) : (
             [...filteredProducts].reverse().map((item) => (
               <div className="col-lg-4 col-md-6" key={item._id}>
-                <div className="card h-100 shadow-lg border-0">
+                <div className="card h-100 shadow border-0">
                   <img
                     src={`http://localhost:8000/${item.productId?.Photo}`}
                     className="card-img-top"
-                    alt={item.productId?.productname}
-                    style={{ height: "220px", objectFit: "cover" }}
+                    style={{ height: 220, objectFit: "cover" }}
+                    alt=""
                   />
 
                   <div className="card-body d-flex flex-column">
-                    <h5 className="card-title fw-semibold">
-                      {item.productId?.productname}
-                    </h5>
-
-                    <p className="card-text text-muted small">
-                      {item.productId?.Description}
-                    </p>
+                    <h5>{item.productId?.productname}</h5>
+                    <p className="text-muted small">{item.productId?.Description}</p>
 
                     <div className="mb-2">Status: {getStatusBadge(item.status)}</div>
 
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <span className="badge bg-success fs-6">
-                        ₹ {item.productId?.price}
-                      </span>
-                      <span className="fw-bold text-dark">
-                        Total: ₹ {item.totalamount}
-                      </span>
+                    <div className="d-flex justify-content-between mb-3">
+                      <Badge bg="success">₹ {item.productId?.price}</Badge>
+                      <strong>₹ {item.totalamount}</strong>
                     </div>
 
-                    <div className="mb-3">
-                      <Badge bg="secondary">Quantity: {item.quantity}</Badge>
-                    </div>
+                    <Badge bg="secondary" className="mb-3">
+                      Quantity: {item.quantity}
+                    </Badge>
 
-                    {/* CANCEL BUTTON */}
-                 {item.status === "pending" && (
-  <Button
-    variant="outline-danger"
-    className="mt-auto fw-bold w-100 mb-2"
-    onClick={() => handleCancel(item._id)}
-  >
-    Cancel Booking
-  </Button>
-)}
-
-                    {/* RATE & REVIEW BUTTON (only if Delivered) */}
-                    {item.status === "Delivered" && (
+                    {/* PENDING */}
+                    {item.status === "pending" && (
                       <Button
-                        variant="outline-success"
-                        className="fw-bold w-100"
-                        onClick={() => handleOpenRating(item)}
+                        variant="outline-danger"
+                        onClick={() => handleCancel(item._id)}
+                        className="mt-auto"
                       >
-                        Rate & Review
+                        Cancel Booking
+                      </Button>
+                    )}
+
+                    {/* DELIVERED */}
+                    {item.status === "Delivered" && (
+                      <div className="d-flex gap-2 mt-auto">
+                        <Button
+                          variant="outline-success"
+                          onClick={() => handleOpenRating(item)}
+                        >
+                          ⭐ Rate
+                        </Button>
+                        <Button
+                          variant="outline-warning"
+                          onClick={() => handleOpenComplaint(item)}
+                        >
+                          ⚠️ Complaint
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* CANCELLED */}
+                    {item.status === "Cancelled" && (
+                      <Button variant="secondary" disabled className="mt-auto">
+                        ❌ Cancelled
                       </Button>
                     )}
                   </div>
@@ -210,34 +242,88 @@ function RequestPrdct() {
       {/* RATING MODAL */}
       <Modal show={showRatingModal} onHide={() => setShowRatingModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Rate & Review</Modal.Title>
+          <Modal.Title>Rate Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Select
+              className="mb-3"
+              value={rating}
+              onChange={(e) => setRating(Number(e.target.value))}
+            >
+              <option value={5}>5 - Excellent</option>
+              <option value={4}>4 - Good</option>
+              <option value={3}>3 - Average</option>
+              <option value={2}>2 - Poor</option>
+              <option value={1}>1 - Bad</option>
+            </Form.Select>
+
+            <Form.Control
+              as="textarea"
+              rows={3}
+              placeholder="Write review"
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+            />
+
+            <Button className="mt-3 w-100" onClick={handleSubmitRating}>
+              Submit
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+
+      {/* COMPLAINT MODAL */}
+      <Modal
+        show={showComplaintModal}
+        onHide={() => setShowComplaintModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Raise Complaint</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
-              <Form.Label>Rating</Form.Label>
-              <Form.Select
-                value={rating}
-                onChange={(e) => setRating(Number(e.target.value))}
-              >
-                <option value={5}>5 - Excellent</option>
-                <option value={4}>4 - Good</option>
-                <option value={3}>3 - Average</option>
-                <option value={2}>2 - Poor</option>
-                <option value={1}>1 - Bad</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Review</Form.Label>
+              <Form.Label>Issue Title</Form.Label>
               <Form.Control
-                as="textarea"
-                rows={3}
-                value={review}
-                onChange={(e) => setReview(e.target.value)}
+                type="text"
+                placeholder="Enter a short title"
+                value={complaintTitle}
+                onChange={(e) => setComplaintTitle(e.target.value)}
               />
             </Form.Group>
-            <Button variant="success" onClick={handleSubmitRating}>
-              Submit
+
+            <Form.Group className="mb-3">
+              <Form.Label>Issue Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={4}
+                placeholder="Describe your issue in detail"
+                value={complaintDescription}
+                onChange={(e) => setComplaintDescription(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Issue Type</Form.Label>
+              <Form.Select
+                value={complaintType}
+                onChange={(e) => setComplaintType(e.target.value)}
+              >
+                <option value="Quality">Quality</option>
+                <option value="Delivery">Delivery</option>
+                <option value="Payment">Payment</option>
+                <option value="Other">Other</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Button
+              variant="warning"
+              className="mt-3 w-100"
+              onClick={handleSubmitComplaint}
+            >
+              Submit Complaint
             </Button>
           </Form>
         </Modal.Body>
