@@ -10,4 +10,5 @@ vendorrouter.post("/vndr_register", upload.single("image"), venderregistration);
 vendorrouter.get("/details/:id",shopHome)
 vendorrouter.get("/viewvendor",viewVendor)
 vendorrouter.put("/vendorsstatus/:loginId",BlockingVendors)
+
 export default vendorrouter;

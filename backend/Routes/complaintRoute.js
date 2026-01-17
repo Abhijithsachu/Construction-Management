@@ -29,6 +29,6 @@ router.put("/status/:complaintId", updateComplaintStatus);
 
 router.post("/worker/:workerId", createWorkerComplaint);
 router.get("/workers/:workerId", getWorkerComplaints);
-router.get("/admin/workers", getAllWorkerComplaintsForAdmin);
+router.get("/admin", getAllWorkerComplaintsForAdmin);
 
 export default router;

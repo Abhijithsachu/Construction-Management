@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Registration_wrk.css';
 import api from '../../api';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Registration_wrk() {
   const [image, setImage] = useState(null);
@@ -17,10 +17,11 @@ function Registration_wrk() {
   const validate = () => {
     if (!image) return "Please upload a photo.";
     if (!fullname.trim()) return "Full name is required.";
+    if (!/^[A-Za-z\s]+$/.test(fullname.trim())) return "Full name can only contain letters and spaces.";
     if (!email.trim()) return "Email is required.";
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Invalid email.";
     if (!phone.trim()) return "Phone is required.";
-    if (!/^[0-9]{10}$/.test(phone)) return "Phone must be 10 digits.";
+    if (!/^[0-9]{10}$/.test(phone)) return "Phone must be exactly 10 digits.";
     if (!qualification.trim()) return "Qualification is required.";
     if (!password) return "Password is required.";
     if (password.length < 6) return "Password too short.";
@@ -47,11 +48,35 @@ function Registration_wrk() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("Registration Successful!");
-      navigate('/');
-      setFullname(""); setEmail(""); setPhone(""); setQualification("");
-      setJobrole("Engineer"); setPassword(""); setConfirmPassword(""); setImage(null);
+      navigate('/login'); // Navigate to login page after registration
+
+      // Reset fields
+      setFullname(""); 
+      setEmail(""); 
+      setPhone(""); 
+      setQualification("");
+      setJobrole("Engineer"); 
+      setPassword(""); 
+      setConfirmPassword(""); 
+      setImage(null);
     } catch (err) {
       alert(err.response?.data?.message || "Something went wrong");
+    }
+  };
+
+  // Restrict full name input to letters and spaces
+  const handleFullnameChange = (e) => {
+    const value = e.target.value;
+    if (/^[A-Za-z\s]*$/.test(value)) {
+      setFullname(value);
+    }
+  };
+
+  // Restrict phone input to numbers only
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    if (/^[0-9]*$/.test(value)) {
+      setPhone(value);
     }
   };
 
@@ -67,19 +92,19 @@ function Registration_wrk() {
             </tr>
             <tr>
               <td><label>Full Name</label></td>
-              <td><input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} /></td>
+              <td><input type="text" value={fullname} onChange={handleFullnameChange} placeholder="Enter full name" /></td>
             </tr>
             <tr>
               <td><label>Email</label></td>
-              <td><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></td>
+              <td><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" /></td>
             </tr>
             <tr>
               <td><label>Phone</label></td>
-              <td><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} /></td>
+              <td><input type="tel" value={phone} onChange={handlePhoneChange} placeholder="Enter phone number" /></td>
             </tr>
             <tr>
               <td><label>Qualification</label></td>
-              <td><input type="text" value={qualification} onChange={(e) => setQualification(e.target.value)} /></td>
+              <td><input type="text" value={qualification} onChange={(e) => setQualification(e.target.value)} placeholder="Enter qualification" /></td>
             </tr>
             <tr>
               <td><label>Job Role</label></td>
@@ -93,15 +118,20 @@ function Registration_wrk() {
             </tr>
             <tr>
               <td><label>Password</label></td>
-              <td><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} /></td>
+              <td><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" /></td>
             </tr>
             <tr>
               <td><label>Confirm Password</label></td>
-              <td><input type="password" value={confirmpassword} onChange={(e) => setConfirmPassword(e.target.value)} /></td>
+              <td><input type="password" value={confirmpassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm password" /></td>
             </tr>
           </tbody>
         </table>
+
         <button type="submit" className="submit-btn">Register</button>
+
+        <p className="login-link">
+          Already have an account? <Link to="/">Login here</Link>
+        </p>
       </form>
     </div>
   );

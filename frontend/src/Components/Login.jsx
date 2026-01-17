@@ -36,15 +36,19 @@ function Login() {
     try {
       const res = await api.post("/login", { username, password });
 
-      if (res.data.role === "Vendor") {navigate("/Vndrhomepage");
+      if (res.data.role === "Vendor") {
       localStorage.setItem("VLoginId", res.data.id);
+
+        navigate("/Vndrhomepage");
 
       }
       else if (res.data.role === "Admin") {navigate("/homepage");
 
       }
-      else if (res.data.role === "User") {navigate("/userhomepage");
+      else if (res.data.role === "User") {
       localStorage.setItem("ULoginId", res.data.id);
+        
+        navigate("/userhomepage");
       
       }
       else if(res.data.role === "Worker"){
@@ -53,8 +57,10 @@ function Login() {
       navigate("/Wrkhomepage");
 
     }
-  } catch {
-      alert("Invalid username or password");
+  } catch (error) {
+      alert(
+        error.response?.data?.message || "Invalid username or password"
+      );
     } finally {
       setLoading(false);
     }
@@ -73,7 +79,7 @@ function Login() {
         <Container>
           <Navbar.Brand className="brand-text">
             <FaHardHat className="me-2 text-warning" />
-            Construction Hub
+          NIRMITHI
           </Navbar.Brand>
 
           <Navbar.Toggle />

@@ -24,16 +24,14 @@ import Sendcomplaint from './Components/user/sendcomplaint'
 import Viewworkers from './Components/user/Viewworker'
 import Sendfeedback from './Components/user/Sendfeedback'
 import Projectdetails from './Components/user/Projectdetails'
-
-import VendorUpdateStatus from './Components/vendor/VendorUpdateStatus'
 import VendorViewRequests from './Components/vendor/ViewreqPrdct'
 import UserViewProduct from './Components/user/UserViewproduct'
 import ViewProject from './Components/worker/viewproject'
 import AdminViewprojects from './Components/admin/adminViewprojects'
 import Addworker from './Components/worker/Addworker'
-import UserProfileCard from './Components/user/UserProfileCard'
 import VendorViewComplaint from './Components/vendor/VendorViewFeedback'
 import Complaint from './Components/worker/Complaint'
+import AdminViewComplaints from './Components/admin/AdminViewComplaints'
 
 
 function App() {
@@ -86,13 +84,12 @@ function App() {
         <Route path='/sendfeedback' element={<Sendfeedback/>}/>
         <Route path='/projectdetails' element={<Projectdetails/>}/>
         <Route path='/viewrequests' element={<VendorViewRequests/>}/>
-        <Route path='/VendorUpdateStatus' element={<VendorUpdateStatus/>}/>
         <Route path='/VendorViewComplaint' element={<VendorViewComplaint/>}/>
         <Route path='/projects' element={<ViewProject/>}/>
         <Route path="/viewprojects" element={<AdminViewprojects/>}/>
         <Route path="/addworker" element={<Addworker/>}/>
-        <Route path="/UserProfileCard" element={<UserProfileCard/>}/>
         <Route path="/viewwrkercomplaint" element={<Complaint/>}/>
+        <Route path="/adminviewcomplaint" element={<AdminViewComplaints/>}/>
     </Routes>
     </>
   )

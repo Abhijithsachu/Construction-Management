@@ -58,7 +58,7 @@ console.log(user);
         <div className="dashboard-header">
           <h2>
             <FaHardHat className="me-2 text-warning" />
-            {user.name} Dashboard
+             Welcome {user.name}
           </h2>
           <Button className="logout-btn" onClick={handleLogout}>
             <FaSignOutAlt className="me-2" />
@@ -69,12 +69,6 @@ console.log(user);
         {/* ===== DASHBOARD CARDS ===== */}
         <Container className="mt-4">
           <Row className="g-4">
-            <DashboardCard
-              icon={<FaUserCircle />}
-              title="Profile"
-              desc="View your personal details."
-              link="/UserProfileCard"
-            />
 
             <DashboardCard
               icon={<FaBoxOpen />}

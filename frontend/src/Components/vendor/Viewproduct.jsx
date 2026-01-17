@@ -3,6 +3,7 @@ import api from "../../api";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Link, useNavigate } from "react-router-dom";
+import "./Addprd.css"; // ✅ same background CSS
 
 function Viewproduct() {
   const [products, setProducts] = useState([]);
@@ -46,17 +47,14 @@ function Viewproduct() {
   };
 
   return (
-    <div
-      style={{
-        backgroundImage:
-          "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1503387762-592deb58ef4e')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        minHeight: "100vh",
-        paddingTop: "40px",
-      }}
-    >
-      <div className="container">
+    <div className="vndrpage">
+      {/* BACKGROUND SHAPES */}
+      <div className="bg-shape one"></div>
+      <div className="bg-shape two"></div>
+      <div className="bg-shape three"></div>
+      <div className="vignette"></div>
+
+      <div className="container py-4">
         {/* BACK */}
         <Button
           variant="light"
@@ -72,9 +70,7 @@ function Viewproduct() {
 
         <div className="row g-4">
           {products.length === 0 ? (
-            <p className="text-center text-light">
-              No products found
-            </p>
+            <p className="text-center text-light">No products found</p>
           ) : (
             products.map((item) => (
               <div className="col-lg-4 col-md-6" key={item._id}>
@@ -90,13 +86,9 @@ function Viewproduct() {
                   />
 
                   <div className="card-body d-flex flex-column">
-                    <h5 className="fw-bold">
-                      {item.productname}
-                    </h5>
+                    <h5 className="fw-bold">{item.productname}</h5>
 
-                    <p className="text-muted small">
-                      {item.Description}
-                    </p>
+                    <p className="text-muted small">{item.Description}</p>
 
                     {/* PRICE & QTY */}
                     <div className="d-flex justify-content-between mb-2">
@@ -112,13 +104,10 @@ function Viewproduct() {
                     <div className="mb-2">
                       <strong>Rating:</strong>{" "}
                       <span className="text-warning">
-                        {renderStars(
-                          item.rating?.avgrating || 0
-                        )}
+                        {renderStars(item.rating?.avgrating || 0)}
                       </span>
                       <span className="text-muted ms-1">
-                        (
-                        {item.rating?.reviews?.length || 0})
+                        ({item.rating?.reviews?.length || 0})
                       </span>
                     </div>
 
@@ -128,12 +117,9 @@ function Viewproduct() {
                         variant="outline-info"
                         size="sm"
                         className="mb-3"
-                        onClick={() =>
-                          openReviewModal(item)
-                        }
+                        onClick={() => openReviewModal(item)}
                       >
-                        💬 View Reviews (
-                        {item.rating.reviews.length})
+                        💬 View Reviews ({item.rating.reviews.length})
                       </Button>
                     )}
 
@@ -147,9 +133,7 @@ function Viewproduct() {
                     <Button
                       variant="outline-danger"
                       className="mt-2 w-100"
-                      onClick={() =>
-                        handleDelete(item._id)
-                      }
+                      onClick={() => handleDelete(item._id)}
                     >
                       🗑 Delete
                     </Button>
@@ -162,66 +146,38 @@ function Viewproduct() {
       </div>
 
       {/* ================= REVIEW MODAL ================= */}
-      <Modal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        centered
-        size="lg"
-      >
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
         <Modal.Header closeButton>
           <Modal.Title>
-            📝 Reviews –{" "}
-            {selectedProduct?.productname}
+            📝 Reviews – {selectedProduct?.productname}
           </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          {selectedProduct?.rating?.reviews
-            ?.length > 0 ? (
-            selectedProduct.rating.reviews.map(
-              (rev, index) => (
-                <div
-                  key={index}
-                  className="border rounded p-3 mb-3"
-                >
-                  <div className="d-flex justify-content-between">
-                    <strong>
-                      👤{" "}
-                      {rev.userId?.name ||
-                        "Anonymous"}
-                    </strong>
-                    <span className="text-warning">
-                      {"⭐".repeat(rev.rating)}
-                    </span>
-                  </div>
-
-                  <p className="mt-2 mb-1">
-                    {rev.review ||
-                      "No comment"}
-                  </p>
-
-                  <small className="text-muted">
-                    {new Date(
-                      rev.createdAt
-                    ).toLocaleDateString()}
-                  </small>
+          {selectedProduct?.rating?.reviews?.length > 0 ? (
+            selectedProduct.rating.reviews.map((rev, index) => (
+              <div key={index} className="border rounded p-3 mb-3">
+                <div className="d-flex justify-content-between">
+                  <strong>👤 {rev.userId?.name || "Anonymous"}</strong>
+                  <span className="text-warning">
+                    {"⭐".repeat(rev.rating)}
+                  </span>
                 </div>
-              )
-            )
+
+                <p className="mt-2 mb-1">{rev.review || "No comment"}</p>
+
+                <small className="text-muted">
+                  {new Date(rev.createdAt).toLocaleDateString()}
+                </small>
+              </div>
+            ))
           ) : (
-            <p className="text-center text-muted">
-              No reviews available
-            </p>
+            <p className="text-center text-muted">No reviews available</p>
           )}
         </Modal.Body>
 
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() =>
-              setShowModal(false)
-            }
-          >
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
             Close
           </Button>
         </Modal.Footer>

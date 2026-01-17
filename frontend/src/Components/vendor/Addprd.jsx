@@ -33,6 +33,12 @@ function Addprd() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Only allow alphabets and spaces for product name
+    if (name === "name") {
+      if (!/^[A-Za-z\s]*$/.test(value)) return;
+    }
+
     setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -86,10 +92,7 @@ function Addprd() {
       <div className="vignette"></div>
 
       {/* BACK BUTTON */}
-      <button
-        onClick={() => navigate(-1)}
-        className="back-btn"
-      >
+      <button onClick={() => navigate(-1)} className="back-btn">
         ⬅ Back
       </button>
 
@@ -104,6 +107,8 @@ function Addprd() {
             value={product.name}
             onChange={handleChange}
             required
+            pattern="^[A-Za-z\s]+$"
+            title="Product name should contain only alphabets"
           />
 
           <label>Price</label>

@@ -193,8 +193,8 @@ export const getWorkerComplaints = async (req, res) => {
 export const getAllWorkerComplaintsForAdmin = async (req, res) => {
   try {
     const complaints = await Complaint.find({ workerId: { $ne: null } })
-      .populate("workerId", "name email")
-      .populate("userId", "fullname email")
+      .populate("workerId")
+      .populate("userId")
       .sort({ createdAt: -1 });
 
     res.status(200).json({ complaints });

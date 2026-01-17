@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Button, Table, Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { FaHardHat, FaSignOutAlt, FaProjectDiagram, FaClipboardList, FaExclamationTriangle } from "react-icons/fa";
+import { FaHardHat, FaSignOutAlt, FaProjectDiagram, FaClipboardList } from "react-icons/fa";
 import './Wrkhome.css'
 import api from '../../api';
 
 function Wrkhome() {
   const LoginId = localStorage.getItem("WLoginId");
   const navigate = useNavigate();
-const [worker,setworker]= useState('')
+
+  const [worker, setWorker] = useState('');
+  const [activeProjects, setActiveProjects] = useState(0);
+  const [pendingRequests, setPendingRequests] = useState(0);
+  const [completedWork, setCompletedWork] = useState(0);
+
   const handleLogout = () => {
     localStorage.clear();
     navigate("/");
@@ -17,20 +22,37 @@ const [worker,setworker]= useState('')
   const getWorker = async () => {
     try {
       const res = await api.get(`/worker/details/${LoginId}`);
-      console.log(res);
-      
       localStorage.setItem('workerId', res.data.user._id);
-      console.log(res.data.user.name);
-      
-      setworker(res.data.user)
+      setWorker(res.data.user);
     } catch (error) {
       console.error("Failed to fetch user:", error);
+    }
+  };
+
+  const getDashboardCounts = async () => {
+    try {
+      const workerId = localStorage.getItem("workerId");
+
+      const res = await api.get(`/worker/workercount/${workerId}`);
+      console.log(res);
+      
+      setActiveProjects(res.data.activeProjects);
+      setPendingRequests(res.data.pendingRequests);
+      setCompletedWork(res.data.completedWork);
+    } catch (error) {
+      console.error("Failed to fetch dashboard counts:", error);
     }
   };
 
   useEffect(() => {
     getWorker();
   }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("workerId")) {
+      getDashboardCounts();
+    }
+  }, [worker]);
 
   return (
     <div className="worker-dashboard">
@@ -55,10 +77,9 @@ const [worker,setworker]= useState('')
 
         {/* ===== DASHBOARD CARDS ===== */}
         <Row className="g-4 mb-4">
-          <DashboardCard title="Active Projects" value="5" icon={<FaProjectDiagram />} />
-          <DashboardCard title="Pending Requests" value="3" icon={<FaClipboardList />} />
-          <DashboardCard title="Completed Work" value="12" icon={<FaHardHat />} />
-
+          <DashboardCard title="Active Projects" value={activeProjects} icon={<FaProjectDiagram />} />
+          <DashboardCard title="Pending Requests" value={pendingRequests} icon={<FaClipboardList />} />
+          <DashboardCard title="Completed Work" value={completedWork} icon={<FaHardHat />} />
         </Row>
 
         {/* ===== QUICK ACTIONS ===== */}

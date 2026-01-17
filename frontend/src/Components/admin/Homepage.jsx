@@ -125,6 +125,22 @@ function HomePage() {
               </Card.Body>
             </Card>
           </Col>
+           <Col md={3} sm={6}>
+            <Card className="dashboard-card hover-shadow text-center h-100">
+              <Card.Body className="d-flex flex-column justify-content-between h-100">
+                <div>
+                  <Card.Title className="card-title">
+                    <FaHardHat className="me-2" /> Complaints
+                  </Card.Title>
+                  <h3 className="card-number text-success">{counts.workers}</h3>
+                  <p className="card-label">View Complaints</p>
+                </div>
+                <Link to="/adminviewcomplaint" className="card-btn btn btn-success mt-3">
+                  Complaint
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
       </Container>
     </div>

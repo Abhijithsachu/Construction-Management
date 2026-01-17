@@ -134,3 +134,35 @@ export const getWorkerHome=async(req,res)=>{
          return res.status(500).json({message:"server side error"})
      }
    }
+
+export const getWorkerDashboardCounts = async (req, res) => {
+  try {
+    const { workerId } = req.params;
+    console.log(workerId);
+    
+
+    const activeProjects = await projectData.countDocuments({
+      workerID: workerId,
+     status:"accepted"
+    });
+
+    const pendingRequests = await projectData.countDocuments({
+      workerID: workerId,
+      status: "pending"
+    });
+
+    const completedWork = await projectData.countDocuments({
+      workerID: workerId,
+      status: "completed"
+    });
+
+    res.status(200).json({
+      activeProjects,
+      pendingRequests,
+      completedWork
+    });
+  } catch (error) {
+    console.error("Dashboard count error:", error);
+    res.status(500).json({ message: "Failed to load dashboard counts" });
+  }
+};

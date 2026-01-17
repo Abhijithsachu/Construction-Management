@@ -181,13 +181,6 @@ function UserViewProduct() {
                       </div>
 
                       <Button
-                        variant="outline-dark"
-                        className="mb-2 w-100"
-                      >
-                        View Details
-                      </Button>
-
-                      <Button
                         variant="warning"
                         className="fw-bold w-100"
                         onClick={() => handleShow(item)}

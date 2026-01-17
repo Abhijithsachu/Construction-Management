@@ -29,6 +29,7 @@ export const productbooking=async(req,res)=>{
 
 export const reqproductbooked = async (req, res) => {
   const { Id } = req.params;
+console.log(Id,'iiiiddddreq');
 
  
 
@@ -93,7 +94,7 @@ export const vendorViewbooking=async(req,res)=>{
   console.log(bookings);
   console.log(filterBookings,'ppppppppp');
    return res.status(200).json({filterBookings})
-  
+   
   
  } catch(e){
   console.error(e);

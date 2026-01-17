@@ -8,10 +8,7 @@ export const addprdts = async (req,res) => {
     const image=req.file.path
 
     try {
-        const existingprd=await productData.findOne({productname:name})
-        if(existingprd){
-            return res.status(400).json({message:"Product already exist"})
-        }
+     
         const product=productData.create({
             productname:name,
             price,

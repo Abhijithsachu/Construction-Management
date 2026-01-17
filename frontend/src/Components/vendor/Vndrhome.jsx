@@ -77,16 +77,9 @@ function Vndrhome() {
             />
 
             <DashboardCard
-              icon={<FaTools />}
-              title="Update Status"
-              desc="Update the status of your products."
-              link="/VendorUpdateStatus"
-            />
-
-            <DashboardCard
               icon={<FaClipboardList />}
-              title="View Requests"
-              desc="Check material requests from users or admin."
+              title="View Requests and Update Status"
+              desc="Check material requests from users."
               link="/viewrequests"
             />
 

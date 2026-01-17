@@ -13,9 +13,6 @@ bookingroute.post("/add", productbooking);
 bookingroute.get("/details/:Id", reqproductbooked);
 bookingroute.put("/cancel/:bookingId", cancelBooking);
 bookingroute.get("/viewbooking/:Id", vendorViewbooking);
-bookingroute.put(
-  "/updatestatus/:bookingId",
-  updateBookingStatus
-);
+bookingroute.put("/updatestatus/:bookingId", updateBookingStatus);
 
 export default bookingroute;
