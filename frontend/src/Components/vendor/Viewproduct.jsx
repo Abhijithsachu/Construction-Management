@@ -56,13 +56,15 @@ function Viewproduct() {
 
       <div className="container py-4">
         {/* BACK */}
-        <Button
-          variant="light"
-          className="fw-bold mb-3"
-          onClick={() => navigate(-1)}
-        >
-          ⬅ Back
-        </Button>
+        <div className="mb-4">
+          <Button
+            variant="outline-warning"
+            className="fw-bold"
+            onClick={() => navigate(-1)}
+          >
+            ⬅ Back
+          </Button>
+        </div>
 
         <h2 className="text-center fw-bold text-white mb-4">
           🏗️ My Products

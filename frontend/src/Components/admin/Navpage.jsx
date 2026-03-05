@@ -30,6 +30,9 @@ function Navpage() {
             <Nav.Link as={Link} to="/viewprojects">
               Projects
             </Nav.Link>
+            <Nav.Link as={Link} to="/adminviewcomplaint">
+              Complaints
+            </Nav.Link>
           </Nav>
 
           {/* Logout button on the right */}

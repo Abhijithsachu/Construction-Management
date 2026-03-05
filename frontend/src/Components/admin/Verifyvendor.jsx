@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Badge, Container, Table } from "react-bootstrap";
+import { Button, Badge, Container, Table, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Navpage from "./Navpage";
 import api from "../../api";
 
 function Verifyvendor() {
   const [vendors, setVendors] = useState([]);
+  const [searchEmail, setSearchEmail] = useState(""); // NEW STATE
 
   const fetchDetails = async () => {
     const res = await api.get("/vendor/viewvendor");
@@ -26,6 +27,11 @@ function Verifyvendor() {
     fetchDetails();
   };
 
+  // 🔍 EMAIL FILTER LOGIC
+  const filteredVendors = vendors.filter((vendor) =>
+    vendor.email?.toLowerCase().includes(searchEmail.toLowerCase())
+  );
+
   return (
     <div className="verifyvendor-page bg-dark min-vh-100 text-white">
       <Navpage />
@@ -37,6 +43,16 @@ function Verifyvendor() {
           </Link>
           <h3 className="fw-bold text-center w-100 mb-0">VENDOR INFO</h3>
           <div></div>
+        </div>
+
+        {/* 🔍 SEARCH INPUT */}
+        <div className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="Search by email..."
+            value={searchEmail}
+            onChange={(e) => setSearchEmail(e.target.value)}
+          />
         </div>
 
         <Table striped bordered hover responsive className="table-dark align-middle">
@@ -51,8 +67,8 @@ function Verifyvendor() {
           </thead>
 
           <tbody>
-            {vendors.length > 0 ? (
-              vendors.map((vendor, index) => (
+            {filteredVendors.length > 0 ? (
+              filteredVendors.map((vendor, index) => (
                 <tr key={vendor._id}>
                   <td>{index + 1}</td>
                   <td>{vendor.Name}</td>

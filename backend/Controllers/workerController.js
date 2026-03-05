@@ -6,35 +6,36 @@ import projectData from "../Models/project.js";
 export const workerregistration = async (req, res) => {
   try {
     console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
+    console.log("FILES:", req.files);
 
     const { fullname, email, phone, qualification, jobrole, password } = req.body;
 
-    // check existing user
     const existinguser = await loginData.findOne({ userName: email });
     if (existinguser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // hash password
     const hashpassword = await bcrypt.hash(password, 10);
 
-    // create login record
     const login = new loginData({
       userName: email,
       passWord: hashpassword,
       role: "Worker"
     });
+
     await login.save();
 
-    // create worker profile
+    // Parse jobrole (since frontend sends JSON string)
+    const parsedJobrole = JSON.parse(jobrole);
+
     const worker = new WORKER({
       name: fullname,
       email,
       phoneNo: phone,
-      jobrole,
+      jobrole: parsedJobrole,
       qualification,
-      photo: req.file ? req.file.path : null, // <--- store image path
+      photo: req.files?.image ? req.files.image[0].path : null,
+      proof: req.files?.proof ? req.files.proof[0].path : null,
       commonkey: login._id
     });
 

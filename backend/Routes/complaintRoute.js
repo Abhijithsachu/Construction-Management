@@ -8,6 +8,7 @@ import {
   createWorkerComplaint,
   getWorkerComplaints,
   getAllWorkerComplaintsForAdmin,
+  getProjectComplaints,
 } from "../Controllers/complaintController.js";
 
 const router = express.Router();
@@ -28,6 +29,7 @@ router.get("/admin/all", getAllComplaintsForAdmin);
 router.put("/status/:complaintId", updateComplaintStatus);
 
 router.post("/worker/:workerId", createWorkerComplaint);
+router.get("/project/:projectId",getProjectComplaints)
 router.get("/workers/:workerId", getWorkerComplaints);
 router.get("/admin", getAllWorkerComplaintsForAdmin);
 

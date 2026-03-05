@@ -14,11 +14,14 @@ const workerSchema=new Schema({
         required:true,
     },
  
-    jobrole:{
-        type:String,
-        required:true,
-    },
+jobrole: {
+    type: [String],
+    required: true,
+},
     photo:{
+        type:String
+    },
+    proof:{
         type:String
     },
     qualification:{

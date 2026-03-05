@@ -59,32 +59,62 @@ function VendorViewRequests() {
     Rejected: "Rejected",
   };
 
+  // STATUS BADGE (Bootstrap Variants Only)
+  const renderStatusBadge = (status) => {
+    const badgeMap = {
+      pending: "warning",
+      Approved: "primary",
+      Packed: "info",
+      Shipped: "dark",     // Changed from primary → dark
+      Delivered: "success",
+      Rejected: "secondary",
+    };
+
+    return <Badge bg={badgeMap[status]}>{status}</Badge>;
+  };
+
+  // ACTION BUTTON (Bootstrap Variants Only)
+  const renderActionButton = (req) => {
+    const nextStatus = nextStatusMap[req.status];
+
+    if (req.status === "Delivered" || req.status === "Rejected") {
+      return <Badge bg="secondary">No Action</Badge>;
+    }
+
+    const buttonMap = {
+      Approved: "primary",
+      Packed: "info",
+      Shipped: "dark",     // Changed here also
+      Delivered: "success",
+    };
+
+    return (
+      <Button
+        variant={buttonMap[nextStatus]}
+        size="sm"
+        className="fw-bold shadow"
+        onClick={() => updateStatus(req._id, nextStatus)}
+      >
+        ➜ {nextStatus}
+      </Button>
+    );
+  };
+
   return (
     <div
+      className="min-vh-100 py-4"
       style={{
-        minHeight: "100vh",
         background:
           "radial-gradient(circle at top, #1f2933, #0b0f14)",
-        paddingTop: "30px",
-        paddingBottom: "40px",
       }}
     >
       <Container>
-        {/* TOP BAR */}
-        <div
-          className="d-flex justify-content-between align-items-center mb-4"
-          style={{
-            background: "rgba(255,255,255,0.08)",
-            backdropFilter: "blur(14px)",
-            borderRadius: "16px",
-            padding: "12px 18px",
-            boxShadow: "0 10px 35px rgba(0,0,0,0.45)",
-          }}
-        >
+
+        <div className="d-flex justify-content-between align-items-center mb-4 bg-dark bg-opacity-50 p-3 rounded shadow-lg">
           <Button
-            variant="outline-light"
-            className="fw-bold"
+            variant="outline-warning"
             onClick={() => navigate(-1)}
+            className="fw-bold"
           >
             ⬅ Back
           </Button>
@@ -94,13 +124,9 @@ function VendorViewRequests() {
           </h4>
 
           <Form.Select
-            className="w-auto fw-bold bg-dark text-white border-0"
+            className="w-auto fw-bold bg-dark text-white border-secondary"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            style={{
-              borderRadius: "10px",
-              boxShadow: "0 4px 14px rgba(0,0,0,0.35)",
-            }}
           >
             <option value="All">All</option>
             <option value="pending">Pending</option>
@@ -114,28 +140,15 @@ function VendorViewRequests() {
 
         <Row>
           <Col>
-            <Card
-              className="border-0"
-              style={{
-                background: "rgba(255,255,255,0.07)",
-                backdropFilter: "blur(16px)",
-                borderRadius: "20px",
-                boxShadow: "0 18px 45px rgba(0,0,0,0.6)",
-              }}
-            >
+            <Card className="bg-dark bg-opacity-50 text-light shadow-lg border-0 rounded-4">
               <Card.Body>
                 <Table
                   responsive
                   hover
-                  className="text-center align-middle mb-0"
-                  style={{ color: "#e5e7eb" }}
+                  className="text-center align-middle mb-0 table-dark"
                 >
                   <thead>
-                    <tr
-                      style={{
-                        background: "rgba(255,255,255,0.12)",
-                      }}
-                    >
+                    <tr>
                       <th>#</th>
                       <th>User</th>
                       <th>Product</th>
@@ -151,105 +164,39 @@ function VendorViewRequests() {
                   <tbody>
                     {filteredRequests.length > 0 ? (
                       filteredRequests.map((req, index) => (
-                        <tr
-                          key={req._id}
-                          style={{
-                            background:
-                              "rgba(0,0,0,0.35)",
-                          }}
-                        >
+                        <tr key={req._id}>
                           <td>{index + 1}</td>
-
                           <td>
                             <strong>{req.userId?.name}</strong>
                             <br />
-                            <small
-                              style={{ color: "#9ca3af" }}
-                            >
+                            <small className="text-muted">
                               {req.userId?.email}
                             </small>
                           </td>
-
-                          <td>
-                            {req.productId?.productname}
-                          </td>
-                          <td>
-                            {req.productId?.Description}
-                          </td>
+                          <td>{req.productId?.productname}</td>
+                          <td>{req.productId?.Description}</td>
                           <td>{req.quantity}</td>
                           <td>{req.address}</td>
                           <td>₹ {req.totalamount}</td>
-
-                          <td>
-                            <Badge
-                              bg={
-                                req.status === "Delivered"
-                                  ? "success"
-                                  : req.status === "Rejected"
-                                  ? "danger"
-                                  : req.status === "warning" ||
-                                    req.status === "pending"
-                                  ? "warning"
-                                  : "info"
-                              }
-                              style={{
-                                fontSize: "0.85rem",
-                                padding: "6px 12px",
-                                borderRadius: "20px",
-                              }}
-                            >
-                              {req.status}
-                            </Badge>
-                          </td>
-
-                          <td>
-                            {req.status !== "Delivered" &&
-                            req.status !== "Rejected" ? (
-                              <Button
-                                variant="outline-light"
-                                size="sm"
-                                style={{
-                                  borderRadius: "20px",
-                                  padding: "6px 14px",
-                                  fontWeight: "bold",
-                                  boxShadow:
-                                    "0 4px 14px rgba(0,0,0,0.4)",
-                                }}
-                                onClick={() =>
-                                  updateStatus(
-                                    req._id,
-                                    nextStatusMap[
-                                      req.status
-                                    ]
-                                  )
-                                }
-                              >
-                                ➜ {nextStatusMap[req.status]}
-                              </Button>
-                            ) : (
-                              <Badge bg="secondary">
-                                No Action
-                              </Badge>
-                            )}
-                          </td>
+                          <td>{renderStatusBadge(req.status)}</td>
+                          <td>{renderActionButton(req)}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td
-                          colSpan="9"
-                          style={{ color: "#9ca3af" }}
-                        >
+                        <td colSpan="9" className="text-muted">
                           No requests available
                         </td>
                       </tr>
                     )}
                   </tbody>
+
                 </Table>
               </Card.Body>
             </Card>
           </Col>
         </Row>
+
       </Container>
     </div>
   );

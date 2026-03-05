@@ -135,20 +135,45 @@
 // CREATE WORKER COMPLAINT
 // POST /complaint/worker/:workerId
 // ========================
+// export const createWorkerComplaint = async (req, res) => {
+//   try {
+//     const { workerId } = req.params;
+//     console.log(workerId,req.body);
+    
+//     const { userId, issueTitle, issueDescription, issueType } = req.body;
+
+
+//     const complaint = new Complaint({
+//       userId,
+//       workerId,
+      
+//       issueDescription,
+
+//     });
+
+//     await complaint.save();
+
+//     res.status(200).json({
+//       message: "Worker complaint submitted successfully",
+//       complaint,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+// POST /complaint/worker/:workerId
 export const createWorkerComplaint = async (req, res) => {
   try {
     const { workerId } = req.params;
-    console.log(workerId,req.body);
-    
-    const { userId, issueTitle, issueDescription, issueType } = req.body;
-
+    const { userId, projectId, issueDescription } = req.body; // include projectId
+console.log(req.body,'complaint');
 
     const complaint = new Complaint({
       userId,
       workerId,
-      
+      projectId,
       issueDescription,
-
     });
 
     await complaint.save();
@@ -162,7 +187,22 @@ export const createWorkerComplaint = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+export const getProjectComplaints = async (req, res) => {
+  try {
+    const { projectId } = req.params;
 
+    // Find all complaints for this project, populate worker info and user who submitted
+    const complaints = await Complaint.find({ projectId })
+      .populate("workerId", "name jobrole")
+      
+console.log(complaints);
+
+    res.status(200).json({ complaints });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 // ========================
 // GET WORKER COMPLAINTS
 // GET /complaint/worker/:workerId

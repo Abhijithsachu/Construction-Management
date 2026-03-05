@@ -87,7 +87,7 @@ function Wrkhome() {
         <Row className="g-4 mb-4">
           {[
             { title: "View All Projects", link: "/projects" },
-            { title: "Request Worker", link: "/addworker" },
+            { title: "Add Staff", link: "/addworker" },
             { title: "View Complaint", link: "/viewwrkercomplaint" }
           ].map((action, index) => (
             <Col md={4} key={index}>

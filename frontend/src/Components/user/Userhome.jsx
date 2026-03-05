@@ -91,12 +91,12 @@ console.log(user);
               link="/userreqworker"
             />
 
-            <DashboardCard
+            {/* <DashboardCard
               icon={<FaUsers />}
               title="Worker Responses"
               desc="View replies & updates."
               link="/viewwrkrs"
-            />
+            /> */}
 
             <DashboardCard
               icon={<FaProjectDiagram />}

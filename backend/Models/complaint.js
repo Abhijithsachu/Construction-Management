@@ -15,6 +15,10 @@ const complaintSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "Worker",
     },
+    projectId:{
+      type: Schema.Types.ObjectId,
+        ref: "project",
+    },
     issueTitle: {
       type: String,
      

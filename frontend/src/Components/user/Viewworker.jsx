@@ -20,6 +20,8 @@ function Viewworkers() {
   const fetchAcceptedWorkers = async () => {
     try {
       const res = await api.get("/worker/verifiedworker");
+      console.log(res);
+      
       setWorkers(res.data);
     } catch (error) {
       console.error(error);
