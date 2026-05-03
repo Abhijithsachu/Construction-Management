@@ -2,149 +2,217 @@ import React, { useState } from 'react';
 import './Registration_vndr.css';
 import api from '../../api';
 import { useNavigate, Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Registration_vndr() {
-  const [CompanyName, setCompanyName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNo, setPhoneNo] = useState('');
-  const [Location, setLocation] = useState('');
-  const [CompanyLogo, setCompanyLogo] = useState(null);
-  const [password, setPassword] = useState('');
-  const [confirmpassword, setConfirmPassword] = useState('');
+  const [form, setForm] = useState({
+    companyName: '',
+    email: '',
+    phone: '',
+    location: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const [companyLogo, setCompanyLogo] = useState(null);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const validate = () => {
-    if (!CompanyLogo) return "Please upload a company logo.";
-    if (!CompanyName.trim()) return "Company name is required.";
-    if (!/^[A-Za-z\s]+$/.test(CompanyName.trim())) return "Company name can only contain letters and spaces.";
-    if (!email.trim()) return "Email is required.";
-    if (!/^\S+@\S+\.\S+$/.test(email)) return "Invalid email address.";
-    if (!phoneNo.trim()) return "Phone number is required.";
-    if (!/^[0-9]{10}$/.test(phoneNo)) return "Phone number must be 10 digits.";
-    if (!Location.trim()) return "Location is required.";
-    if (!password) return "Password is required.";
-    if (password.length < 6) return "Password must be at least 6 characters.";
-    if (password.trim() !== confirmpassword.trim()) return "Passwords do not match.";
-    return null;
+  // Handle input change
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Validation
+  const validate = () => {
+    let newErrors = {};
+
+    // Company Name
+ if (!form.companyName.trim()) {
+  newErrors.companyName = "Company name is required";
+} else if (!/^[A-Za-z0-9\s]+$/.test(form.companyName)) {
+  newErrors.companyName = "No special characters allowed";
+}
+
+    // Email
+    if (!form.email) {
+      newErrors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    // Phone
+    if (!form.phone) {
+      newErrors.phone = "Phone is required";
+    } else if (!/^[6-9]\d{9}$/.test(form.phone)) {
+      newErrors.phone = "Enter valid 10-digit phone number";
+    }
+
+    // Location
+    if (!form.location.trim()) {
+      newErrors.location = "Location is required";
+    }
+
+    // Logo
+    if (!companyLogo) {
+      newErrors.companyLogo = "Company logo is required";
+    }
+
+    // Password
+    if (!form.password) {
+      newErrors.password = "Password is required";
+    } else if (!/^(?=.*[A-Z])(?=.*[0-9]).{6,}$/.test(form.password)) {
+      newErrors.password = "Must contain 1 uppercase, 1 number & min 6 chars";
+    }
+
+    // Confirm Password
+    if (!form.confirmPassword) {
+      newErrors.confirmPassword = "Confirm your password";
+    } else if (form.confirmPassword !== form.password) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const error = validate();
-    if (error) return alert(error);
+
+    if (!validate()) return;
 
     const formData = new FormData();
-    formData.append("image", CompanyLogo);
-    formData.append("CompanyName", CompanyName);
-    formData.append("email", email);
-    formData.append("phoneNo", phoneNo);
-    formData.append("Location", Location);
-    formData.append("password", password);
+    formData.append("image", companyLogo);
+    formData.append("CompanyName", form.companyName);
+    formData.append("email", form.email);
+    formData.append("phoneNo", form.phone);
+    formData.append("Location", form.location);
+    formData.append("password", form.password);
 
     try {
       await api.post("/vendor/vndr_register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
       alert("Registration Successful!");
 
-      // Clear fields
-      setCompanyName('');
-      setEmail('');
-      setPhoneNo('');
-      setLocation('');
-      setPassword('');
-      setConfirmPassword('');
+      // Reset
+      setForm({
+        companyName: '',
+        email: '',
+        phone: '',
+        location: '',
+        password: '',
+        confirmPassword: ''
+      });
       setCompanyLogo(null);
 
-      navigate('/'); // Redirect to login page
+      navigate('/');
+
     } catch (err) {
       alert(err.response?.data?.message || "Something went wrong");
     }
   };
 
-  // Prevent invalid characters while typing
-  const handleCompanyNameChange = (e) => {
-    const value = e.target.value;
-    if (/^[A-Za-z\s]*$/.test(value)) {
-      setCompanyName(value);
-    }
-  };
-
-  const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    if (/^[0-9]*$/.test(value)) {
-      setPhoneNo(value);
-    }
-  };
-
   return (
     <div className='registration-page'>
-      <div className="bg-shape one"></div>
-      <div className="bg-shape two"></div>
-      <div className="bg-shape three"></div>
-      <div className="vignette"></div>
-
       <form className="vndrform" onSubmit={handleSubmit}>
         <h1 className='vndrheading'>Vendor Registration</h1>
 
+        {/* Company Name */}
         <label>Company Name</label>
         <input
           type="text"
-          value={CompanyName}
-          onChange={handleCompanyNameChange}
+          name="companyName"
+          value={form.companyName}
+          onChange={handleChange}
           placeholder="Enter company name"
         />
+        {errors.companyName && <span className="error">{errors.companyName}</span>}
 
+        {/* Email */}
         <label>Email</label>
         <input
           type="email"
-          value={email}
-          onChange={(e)=>setEmail(e.target.value)}
+          name="email"
+          value={form.email}
+          onChange={handleChange}
           placeholder="Enter email"
         />
+        {errors.email && <span className="error">{errors.email}</span>}
 
-        <label>Phone No</label>
+        {/* Phone */}
+        <label>Phone</label>
         <input
           type="tel"
-          value={phoneNo}
-          onChange={handlePhoneChange}
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
           placeholder="Enter phone number"
         />
+        {errors.phone && <span className="error">{errors.phone}</span>}
 
+        {/* Location */}
         <label>Location</label>
         <input
           type="text"
-          value={Location}
-          onChange={(e)=>setLocation(e.target.value)}
+          name="location"
+          value={form.location}
+          onChange={handleChange}
           placeholder="Enter location"
         />
+        {errors.location && <span className="error">{errors.location}</span>}
 
+        {/* Logo */}
         <label>Company Logo</label>
         <input
           type="file"
           accept="image/*"
-          onChange={(e)=>setCompanyLogo(e.target.files[0])}
+          onChange={(e) => setCompanyLogo(e.target.files[0])}
         />
+        {errors.companyLogo && <span className="error">{errors.companyLogo}</span>}
 
+        {/* Password */}
         <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e)=>setPassword(e.target.value)}
-          placeholder="Enter password"
-        />
+        <div className="password-field">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            placeholder="Enter password"
+          />
+          <span onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+        {errors.password && <span className="error">{errors.password}</span>}
 
+        {/* Confirm Password */}
         <label>Confirm Password</label>
-        <input
-          type="password"
-          value={confirmpassword}
-          onChange={(e)=>setConfirmPassword(e.target.value)}
-          placeholder="Confirm password"
-        />
+        <div className="password-field">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm password"
+          />
+          <span onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+        {errors.confirmPassword && (
+          <span className="error">{errors.confirmPassword}</span>
+        )}
 
-        <button className="submitBtn" type="submit">Register</button>
+        <button type="submit" className="submitBtn">Register</button>
 
-        {/* Link to Login Page */}
         <p className="login-link">
           Already have an account? <Link to="/">Login here</Link>
         </p>

@@ -116,3 +116,33 @@
   background: #e0ac05;
   transform: scale(1.03);
 }
+
+.error {
+  color: #ff4d4f;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 45px;
+}
+
+.password-field span {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+.password-field span:hover {
+  color: #3b82f6;
+}
